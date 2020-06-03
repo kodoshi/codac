@@ -1,0 +1,19 @@
+{
+  "name": "codac-backend",
+  "version": "1.0.0",
+  "description": "Backend side of codac-pff project",
+  "main": "app.js",
+  "scripts": {
+    "start": "nodemon app.js",
+    "test": "jest"
+  },
+  "keywords": [
+    "backend"
+  ],
+  "author": "Team2",
+  "license": "ISC",
+  "dependencies": {
+    "express": "^4.17.1",
+    "nodemon": "^2.0.4"
+  }
+}
