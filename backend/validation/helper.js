@@ -1,3 +1,6 @@
+/**
+ * 1 more step of validation being done to return json response if conditions aren't met
+ */
 exports.createPostValidator = (req, res, next) => {
   req.check("title", "Insert Title").notEmpty();
   req
