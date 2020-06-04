@@ -24,13 +24,14 @@ db.on("error", function (err) {
 });
 
 const postRoutes = require("./routes/post"); //routing
+const authRoutes = require("./routes/auth"); //routing
 
-//logging middleware
+//middleware
 app.use(morgan("dev"));
 app.use(bodyParser.json()); //express is depress-ion
 app.use(expressValidator());
-
 app.use("/", postRoutes);
+app.use("/", authRoutes);
 
 app.listen(process.env.PORT, () => {
   console.log(`Node server active on port ${process.env.PORT}`);
