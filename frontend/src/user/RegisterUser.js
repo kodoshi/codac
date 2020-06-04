@@ -1,20 +1,38 @@
-import React, { Component } from "react";
+import React from "react";
 import axios from "axios";
+import {withRouter} from "react-router";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faUser } from "@fortawesome/fontawesome-free-solid";
 
-class RegisterUser extends Component {
+class RegisterUser extends React.Component {
   constructor(props) {
     super(props);
 
     this.state = {
-      username: "",
+      name: "",
       email: "",
-      password: "",
-      confirmpassword: "",
-      error: "",
+      password: ""
+    
+      
     };
   }
+
+clickSubmit = event => {
+  event.preventDefault()
+  const {name, email, password} = this.state
+  const user = {
+    name, 
+    email,
+    password
+  }
+   
+      axios.post('http://localhost:4242/singup', user).then(() =>{
+      
+       this.props.history.push("/singin")
+      });
+}
+
+
 
   handleChange(event) {
     const target = event.target;
@@ -25,6 +43,11 @@ class RegisterUser extends Component {
       [name]: value,
     });
   }
+
+ 
+     
+    
+
 
   render() {
     return (
@@ -39,9 +62,9 @@ class RegisterUser extends Component {
           <input
             type="text"
             onChange={(event) => this.handleChange(event)}
-            value={this.state.username}
+            value={this.state.name}
             className="form-control"
-            name="username"
+            name="name"
             required
           />
         </div>
@@ -68,20 +91,10 @@ class RegisterUser extends Component {
             required
           />
         </div>
-        <div className="form-group">
-          <label className="text-muted">Confirm Password: </label>
-          <input
-            type="password"
-            onChange={(event) => this.handleChange(event)}
-            value={this.state.confirmpassword}
-            className="form-control"
-            name="confirmpassword"
-            required
-          />
-        </div>
+       
         <button
           className="btn btn-raised btn-primary"
-          onClick={() => this.callserverRegister()}
+          onClick={this.clickSubmit}
         >
           Submit
         </button>
@@ -90,4 +103,4 @@ class RegisterUser extends Component {
   }
 }
 
-export default RegisterUser;
+export default withRouter(RegisterUser);

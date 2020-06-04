@@ -12,8 +12,8 @@ render() {
 		<div>
 		<Switch>
 			<Route exact path="/" component={HomePage} />
-			<Route  path="/register" component={RegisterUser} />
-			<Route  path="/login" component={LoginUser} />
+			<Route exact path="/singup" component={RegisterUser} />
+			<Route exact path="/singin" component={LoginUser} />
 
 
 
