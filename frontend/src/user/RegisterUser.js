@@ -11,22 +11,11 @@ class RegisterUser extends React.Component {
     this.state = {
       name: "",
       email: "",
-      password: ""
+      password: "", 
+      error: ""
     
-      
     };
   }
-
-registertodb() {
-  const {name, email, password} = this.state
-  
-   
-      axios.post('http://localhost:4242/signup', this.state).then(() =>{
-      
-       this.props.history.push("/signin")
-      });
-}
-
 
 
   handleChange(event) {
@@ -35,11 +24,39 @@ registertodb() {
     const name = target.name;
 
     this.setState({
-      [name]: value,
+      [name]: value
     });
   }
 
- 
+
+registertodb() {
+  const {name, email, password} = this.state
+  const user = {
+    name, email, password
+  };
+
+  this.signup(user).then(data => {
+    
+    if (data.error) 
+      this.setState({error: data.error});
+    else 
+      this.setState({error: "", name: "", email: "", password: "" });
+      
+  });
+  
+};
+
+signup = user => {
+
+   
+     return axios.post('http://localhost:4242/signup', this.state).then(response =>{
+      
+       this.props.history.push("/signin")
+      }).catch(err => {
+        console.log(err.message)
+      })
+}
+
   render() {
     return (
       <div className="container">
@@ -48,6 +65,7 @@ registertodb() {
         </h2>
         <h4> Please fill in all fields to create new user account </h4>
 
+        <div className="alert alert-primary" style={{display: this.state.error ? "": "none" }}> {this.state.error}</div>
         <div className="form-group">
           <label className="text-muted">Username: </label>
           <input
