@@ -35,7 +35,8 @@ registertodb() {
     name, email, password
   };
 
-  this.signup(user).then(data => {
+  this.signup(user)
+  .then(data => {
     
     if (data.error) 
       this.setState({error: data.error});
