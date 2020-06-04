@@ -17,18 +17,13 @@ class RegisterUser extends React.Component {
     };
   }
 
-clickSubmit = event => {
-  event.preventDefault()
+registertodb() {
   const {name, email, password} = this.state
-  const user = {
-    name, 
-    email,
-    password
-  }
+  
    
-      axios.post('http://localhost:4242/singup', user).then(() =>{
+      axios.post('http://localhost:4242/signup', this.state).then(() =>{
       
-       this.props.history.push("/singin")
+       this.props.history.push("/signin")
       });
 }
 
@@ -45,10 +40,6 @@ clickSubmit = event => {
   }
 
  
-     
-    
-
-
   render() {
     return (
       <div className="container">
@@ -94,8 +85,7 @@ clickSubmit = event => {
        
         <button
           className="btn btn-raised btn-primary"
-          onClick={this.clickSubmit}
-        >
+          onClick={() => this.registertodb()}>
           Submit
         </button>
       </div>
