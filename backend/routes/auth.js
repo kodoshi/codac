@@ -1,12 +1,12 @@
 const express = require("express");
 const router = express.Router();
-const postController = require("../controllers/post");
+const authController = require("../controllers/auth");
 const validator = require("../validation/helper");
 
 /**
  * routes getting 'filtered' through middlewares
  */
-router.get("/", postController.getPost);
-router.post("/post", validator.createPostValidator, postController.createPost);
+
+router.post("/signup", validator.userSignupValidator, authController.signup);
 
 module.exports = router;
