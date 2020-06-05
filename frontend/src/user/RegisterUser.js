@@ -2,6 +2,7 @@ import React from "react";
 import { withRouter } from "react-router";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faUser } from "@fortawesome/fontawesome-free-solid";
+import './style.css'; 
 
 class RegisterUser extends React.Component {
   constructor(props) {
@@ -59,9 +60,9 @@ class RegisterUser extends React.Component {
 
   render() {
     return (
-
-      <div className="container">
-        <h2 className="mt-5 mb-5">
+<div className="body">
+      <div className="cont">
+        <h2 className="mt-5 mb-5 text-center">
           <FontAwesomeIcon icon={faUser} /> Sign-up
         </h2>
         <h4> Please fill in all fields to create new user account </h4>
@@ -72,35 +73,35 @@ class RegisterUser extends React.Component {
          </div>
 
         <div className="form-group">
-          <label className="text-muted">Username: </label>
+          <label className="text-light">Username: </label>
           <input
             type="text"
             onChange={(event) => this.handleChange(event)}
             value={this.state.name}
-            className="form-control"
+            className="form-control bg-light"
             name="name"
             required
           />
         </div>
 
-        <div className="form-group">
-          <label className="text-muted">Email: </label>
+        <div className="form-group ">
+          <label className="text-light">Email: </label>
           <input
             type="email"
             onChange={(event) => this.handleChange(event)}
             value={this.state.email}
-            className="form-control"
+            className="form-control bg-light"
             name="email"
             required
           />
         </div>
         <div className="form-group">
-          <label className="text-muted">Password: </label>
+          <label className="text-light">Password: </label>
           <input
             type="password"
             onChange={(event) => this.handleChange(event)}
             value={this.state.password}
-            className="form-control"
+            className="form-control bg-light"
             name="password"
             required
           />
@@ -113,6 +114,8 @@ class RegisterUser extends React.Component {
           Submit
         </button>
       </div>
+     </div>
+
     );
   }
 }

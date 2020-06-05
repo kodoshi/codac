@@ -69,8 +69,9 @@ fetch("http://localhost:4242/signin", {
 
   render() {
     return (
-      <div className="container">
-        <h2 className="mt-5 mb-5">
+      <div className = "body">
+      <div className="cont">
+        <h2 className="mt-5 mb-5 text-center ">
           <FontAwesomeIcon icon={faUser} /> Sign-in
         </h2>
          <div 
@@ -80,24 +81,24 @@ fetch("http://localhost:4242/signin", {
          </div>
 
         <div className="form-group">
-          <label className="text-muted">Email: </label>
+          <label className="text-light">Email: </label>
           <input
             type="text"
             onChange={(event) => this.handleChange(event)}
             value={this.state.email}
-            className="form-control"
+            className="form-control bg-light"
             name="email"
             required
           />
         </div>
 
         <div className="form-group">
-          <label className="text-muted">Password: </label>
+          <label className="text-light">Password: </label>
           <input
             type="password"
             onChange={(event) => this.handleChange(event)}
             value={this.state.password}
-            className="form-control"
+            className="form-control bg-light"
             name="password"
             required
           />
@@ -110,6 +111,7 @@ fetch("http://localhost:4242/signin", {
           Submit
         </button>
       </div>
+   </div>
     );
   }
 }
