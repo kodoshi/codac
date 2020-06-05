@@ -7,9 +7,9 @@ class LoginUser extends Component {
     super(props);
 
     this.state = {
-      username: "",
+      email: "",
       password: "",
-      error: "",
+      error: ""
     };
   }
 
@@ -22,6 +22,50 @@ class LoginUser extends Component {
       [name]: value,
     });
   }
+  authenticate(tokenkey, next){
+      if(typeof window !== "undifined"){
+        //save the token to the localStorage
+        localStorage.setItem("tokenkey", JSON.stringify(tokenkey))
+        // redirect to userprofile page
+        this.props.history.push("/"); 
+
+        next();
+      }
+    }
+
+loginuser() {
+   
+    const { email, password } = this.state;
+    const user = {
+      email,
+      password
+    }
+    console.log(user)
+    
+ // send the http request to the server
+fetch("http://localhost:4242/signin", {
+      method: "POST",
+      body: JSON.stringify(user),
+      headers: {
+        "Content-Type": "application/json"
+      }
+      // take the response object from the server
+    }).then(function(response) {
+      return response.json()
+    }).then(data => {
+      //if there is an error change the error state
+    if (data.error) this.setState({error: data.error})
+      else 
+      //authenticate
+      this.authenticate(data)
+
+
+  }).catch((err) =>{
+        console.log(err)
+    });
+
+  };
+
 
   render() {
     return (
@@ -29,15 +73,20 @@ class LoginUser extends Component {
         <h2 className="mt-5 mb-5">
           <FontAwesomeIcon icon={faUser} /> Sign-in
         </h2>
+         <div 
+         className="alert alert-danger"
+         style={{display: this.state.error ? "": "none"}}>
+         {this.state.error}
+         </div>
 
         <div className="form-group">
-          <label className="text-muted">Username: </label>
+          <label className="text-muted">Email: </label>
           <input
             type="text"
             onChange={(event) => this.handleChange(event)}
-            value={this.state.username}
+            value={this.state.email}
             className="form-control"
-            name="username"
+            name="email"
             required
           />
         </div>
@@ -56,7 +105,7 @@ class LoginUser extends Component {
 
         <button
           className="btn btn-raised btn-primary"
-          onClick={() => this.callserverLogin()}
+          onClick={() => this.loginuser()}
         >
           Submit
         </button>

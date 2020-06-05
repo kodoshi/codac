@@ -34,31 +34,25 @@ class RegisterUser extends React.Component {
       email,
       password,
     }
-
-
-  this.signup(user).then(data => {
-    if (data.error) this.setState({error: data.error})
-      else this.props.history.push("/signin"); 
-
-  })
- 
-  
-};
-
-  signup = user => {
-
-    return fetch("http://localhost:4242/signup", {
+ // send the http request to the server
+ fetch("http://localhost:4242/signup", {
       method: "POST",
       body: JSON.stringify(user),
       headers: {
         "Content-Type": "application/json"
-      },
-      body: JSON.stringify(user)
+      }
+      // take the response object from the server
     }).then(function(response) {
       return response.json()
-    }).catch((err) =>{
+    }).then(data => {
+      //if there is an error change the error
+    if (data.error) this.setState({error: data.error})
+      else 
+      // redirect to ligin page 
+        this.props.history.push("/signin"); 
+
+  }).catch((err) =>{
         console.log(err)
-      
     });
 
   };
@@ -71,6 +65,11 @@ class RegisterUser extends React.Component {
           <FontAwesomeIcon icon={faUser} /> Sign-up
         </h2>
         <h4> Please fill in all fields to create new user account </h4>
+         <div 
+         className="alert alert-danger"
+         style={{display: this.state.error ? "": "none"}}>
+         {this.state.error}
+         </div>
 
         <div className="form-group">
           <label className="text-muted">Username: </label>
