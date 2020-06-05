@@ -71,7 +71,7 @@ fetch("http://localhost:4242/signin", {
     return (
       <div className = "body">
       <div className="cont">
-        <h2 className="mt-5 mb-5 text-center ">
+        <h2 className="mt-5 mb-5 text-center logo ">
           <FontAwesomeIcon icon={faUser} /> Sign-in
         </h2>
          <div 

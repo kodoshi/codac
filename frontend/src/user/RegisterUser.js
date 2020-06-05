@@ -62,7 +62,7 @@ class RegisterUser extends React.Component {
     return (
 <div className="body">
       <div className="cont">
-        <h2 className="mt-5 mb-5 text-center">
+        <h2 className="mt-5 mb-5 text-center logo">
           <FontAwesomeIcon icon={faUser} /> Sign-up
         </h2>
         <h4> Please fill in all fields to create new user account </h4>
