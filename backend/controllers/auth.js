@@ -1,5 +1,6 @@
 const User = require("../models/user");
 const jwt = require("jsonwebtoken");
+const express_jwt = require("express-jwt");
 const config = require("../config/config");
 
 exports.signup = async (req, res) => {
@@ -40,3 +41,9 @@ exports.signout = (req, res) => {
   res.clearCookie("monedhe"); //to log out we clear the token
   return res.json({ message: "Sign out successful" });
 };
+
+exports.requireSignin = express_jwt({
+  //if json web token is valid, express jwt adds the verified id to the request object
+  secret: config.JWT_SECRET,
+  userProperty: "auth",
+});
