@@ -5,7 +5,7 @@ class Homepage extends React.Component {
 		return (
 			<div className="jumbotron">
 <h2> Home </h2>
-<p className="lead"> Welcome to the Homepage </p>
+<p className="lead cont"> Welcome to the Albanian Facebook </p>
 </div>
 			);
 	}
