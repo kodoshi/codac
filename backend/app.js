@@ -6,6 +6,7 @@ const morgan = require("morgan");
 const bodyParser = require("body-parser");
 const cookieParser = require("cookie-parser");
 const expressValidator = require("express-validator");
+const cors = require ("cors");
 
 // Mongoose DB connection
 mongoose.connect(config.dbCFG, {
@@ -28,6 +29,8 @@ const postRoutes = require("./routes/post"); //routing
 const authRoutes = require("./routes/auth"); //routing
 
 //middleware
+app.use(cors());
+
 app.use(morgan("dev"));
 app.use(bodyParser.json()); //express is depress-ion
 app.use(cookieParser());

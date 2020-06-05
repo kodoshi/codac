@@ -22,7 +22,7 @@ exports.createPostValidator = (req, res, next) => {
   const errors = req.validationErrors();
   if (errors) {
     const firstError = errors.map((err) => err.msg)[0]; //first error instance gets logged
-    return res.status(400).json({ error: firstError });
+    return res.status(400).json({error: firstError});
   }
 
   next(); //so we dont get stuck
@@ -55,7 +55,7 @@ exports.userSignupValidator = (req, res, next) => {
   const errors = req.validationErrors();
   if (errors) {
     const firstError = errors.map((err) => err.msg)[0]; //first error instance gets logged
-    return res.status(400).json({ error: firstError });
+    return res.status(401).json({ error: firstError });
   }
 
   next(); //so we dont get stuck

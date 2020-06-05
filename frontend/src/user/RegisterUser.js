@@ -1,5 +1,4 @@
 import React from "react";
-import axios from "axios";
 import { withRouter } from "react-router";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faUser } from "@fortawesome/fontawesome-free-solid";
@@ -12,7 +11,7 @@ class RegisterUser extends React.Component {
       name: "",
       email: "",
       password: "",
-      error: "",
+      error: ""
     };
   }
 
@@ -22,74 +21,57 @@ class RegisterUser extends React.Component {
     const name = target.name;
 
     this.setState({
-      [name]: value,
+      [name]: value
+      
     });
   }
 
   registertodb() {
-    //clickSubmit = (event) => {
-    //event.preventDefault();
+   
     const { name, email, password } = this.state;
     const user = {
       name,
       email,
       password,
-    };
+    }
 
-<<<<<<< HEAD
-registertodb() {
-  const {name, email, password} = this.state
-  const user = {
-    name, email, password
-  };
 
-  this.signup(user)
-  .then(data => {
-    
-    if (data.error) 
-      this.setState({error: data.error});
-    else 
-      this.setState({error: "", name: "", email: "", password: "" });
-      
-  });
+  this.signup(user).then(data => {
+    if (data.error) this.setState({error: data.error})
+      else this.props.history.push("/signin"); 
+
+  })
+ 
   
 };
 
-signup = user => {
-=======
-    this.signup(user).then((data) => {
-      if (data.error) this.setState({ error: data.error });
-      else this.setState({ error: "", name: "", email: "", password: "" });
-    });
-  }
->>>>>>> e132c1c74dae3c8c46798ec326c5f53bc5ee09d8
+  signup = user => {
 
-  signup = (user) => {
-    return axios
-      .post("http://localhost:4242/signup", this.state)
-      .then((response) => {
-        this.props.history.push("/signin");
-      })
-      .catch((err) => {
-        console.log(err.message);
-      });
+    return fetch("http://localhost:4242/signup", {
+      method: "POST",
+      body: JSON.stringify(user),
+      headers: {
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify(user)
+    }).then(function(response) {
+      return response.json()
+    }).catch((err) =>{
+        console.log(err)
+      
+    });
+
   };
 
   render() {
     return (
+
       <div className="container">
         <h2 className="mt-5 mb-5">
           <FontAwesomeIcon icon={faUser} /> Sign-up
         </h2>
         <h4> Please fill in all fields to create new user account </h4>
 
-        <div
-          className="alert alert-primary"
-          style={{ display: this.state.error ? "" : "none" }}
-        >
-          {" "}
-          {this.state.error}
-        </div>
         <div className="form-group">
           <label className="text-muted">Username: </label>
           <input
@@ -124,14 +106,7 @@ signup = user => {
             required
           />
         </div>
-        {/* 
-        <button
-          onClick={this.clickSubmit}
-          className="btn btn-raised btn-primary"
-        >
-          Submit
-        </button>
-*/}
+      
         <button
           className="btn btn-raised btn-primary"
           onClick={() => this.registertodb()}
