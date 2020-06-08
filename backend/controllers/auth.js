@@ -18,17 +18,19 @@ exports.signup = async (req, res) => {
 exports.signin = (req, res) => {
   const { email, password } = req.body;
   User.findOne({ email }, (err, user) => {
+    //if email does not exists
     if (err || !user) {
       return res.status(401).json({
         error: "This email does not exist",
       });
     }
-
+    //if the password is not same as the hashed version 
     if (!user.authenticate(password)) {
       return res.status(401).json({
         error: "Password is incorrect",
       });
     }
+    
     const token = jwt.sign({ _id: user._id }, config.JWT_SECRET); //token being generated with user id and JWT secret
     res.cookie("monedhe", token, { expire: new Date() + 3600000 }); //1 hour remember me cookie
     const { _id, name, email } = user;
