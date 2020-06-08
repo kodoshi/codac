@@ -17,7 +17,7 @@ exports.getPost = (req, res) => {
 
 /**
  * formidable package methods being used to handle image upload within the post
- * Create Post function urrently, queries and selections to/from db are made here with standart MongoDB methods, json response is being returned
+ * Create Post function currently, queries and selections to/from db are made here with standart MongoDB methods, json response is being returned
  */
 exports.createPost = (req, res, next) => {
   let form = new formidable.IncomingForm();
