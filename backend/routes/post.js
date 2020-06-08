@@ -8,7 +8,8 @@ const validator = require("../validation/helper");
 /**
  * routes getting 'filtered' through middlewares
  */
-router.get("/", postController.getPost);
+router.get("/posts", postController.getPost);
+
 router.post(
   "/post/new/:userId",
   authController.requireSignin,
@@ -20,7 +21,20 @@ router.get(
   //authController.requireSignin,  //maybe we dont need auth for this?
   postController.postsByUser
 );
+router.put(
+  "/post/:postId",
+  authController.requireSignin,
+  postController.isPoster,
+  postController.updatePost
+);
+router.delete(
+  "/post/:postId",
+  authController.requireSignin,
+  postController.isPoster,
+  postController.deletePost
+);
 
 router.param("userId", userController.userById); //userById() with be executed in routes that have :userId
+router.param("postId", postController.postById); //postById() with be executed in routes that have :postId
 
 module.exports = router;

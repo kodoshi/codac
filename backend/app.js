@@ -6,6 +6,7 @@ const morgan = require("morgan");
 const bodyParser = require("body-parser");
 const cookieParser = require("cookie-parser");
 const expressValidator = require("express-validator");
+const fs = require("fs");
 const cors = require("cors");
 
 // Mongoose DB connection
@@ -28,6 +29,7 @@ db.on("error", function (err) {
 const postRoutes = require("./routes/post"); //post routing
 const authRoutes = require("./routes/auth"); //authentication routing
 const userRoutes = require("./routes/user"); //user routing
+app.use("/api", express.static("docs/api_docs.json")); //API Routes Documentation
 
 //middlewares
 app.use(cors());

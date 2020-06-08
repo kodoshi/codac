@@ -60,7 +60,7 @@ exports.getUser = (req, res) => {
 
 /**
  * Update User function that edits the user inside the req.profile with lodash.extend method,
- * date of update gets persisted in the DB and user is returned in the response
+ * date of update gets persisted in the DB and updated user is returned in the response
  */
 exports.updateUser = (req, res, next) => {
   let user = req.profile;
