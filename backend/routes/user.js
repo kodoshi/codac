@@ -13,6 +13,16 @@ router.get(
   authController.requireSignin,
   userController.getUser
 );
+router.put(
+  "/user/:userId",
+  authController.requireSignin,
+  userController.updateUser
+);
+router.delete(
+  "/user/:userId",
+  authController.requireSignin,
+  userController.deleteUser
+);
 
 router.param("userId", userController.userById); //userById() with be executed in routes that have :userId
 

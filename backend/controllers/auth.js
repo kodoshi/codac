@@ -3,6 +3,9 @@ const jwt = require("jsonwebtoken");
 const express_jwt = require("express-jwt");
 const config = require("../config/config");
 
+/**
+ * Sign Up function currently, queries and selections to/from db are made here with standart MongoDB methods, json response is being returned
+ */
 exports.signup = async (req, res) => {
   const userExists = await User.findOne({ email: req.body.email });
   if (userExists) {
@@ -16,6 +19,9 @@ exports.signup = async (req, res) => {
   res.status(200).json({ message: "Sign-up successful" });
 };
 
+/**
+ * Sign in function currently, queries and selections to/from db are made here with standart MongoDB methods, json response is being returned
+ */
 exports.signin = (req, res) => {
   const { email, password } = req.body;
   User.findOne({ email }, (err, user) => {
@@ -25,20 +31,22 @@ exports.signin = (req, res) => {
         error: "This email does not exist",
       });
     }
-    //if the password is not same as the hashed version 
+    //if the password is not same as the hashed version
     if (!user.authenticate(password)) {
       return res.status(401).json({
         error: "Password is incorrect",
       });
     }
-    
+
     const token = jwt.sign({ _id: user._id }, config.JWT_SECRET); //token being generated with user id and JWT secret
     res.cookie("monedhe", token, { expire: new Date() + 3600000 }); //1 hour remember me cookie
     const { _id, name, email } = user;
     return res.json({ token, user: { _id, email, name } }); //sending the user and his token to frontend
   });
 };
-
+/**
+ * Logout function, to log out we just clear the cookie that holds the token
+ */
 exports.signout = (req, res) => {
   res.clearCookie("monedhe"); //to log out we clear the token
   return res.json({ message: "Sign out successful" });

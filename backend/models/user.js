@@ -53,7 +53,10 @@ userSchema
     return this._password;
   });
 
-//methods of User model
+/**
+ * Methods of User model, Authenticate function that compares plaintext password to hashed password,
+ * Encrypt password function that encrypts the given plaintext with sha1 + salt
+ */
 userSchema.methods = {
   authenticate: function (plainText) {
     return this.encryptPassword(plainText) === this.hashed_password;

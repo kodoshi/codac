@@ -1,6 +1,10 @@
 /**
  * 1 more step of validation being done to return json response if conditions aren't met
  */
+
+/**
+ * Create Post Validator method, checks 1 more time the minimum requirements needed to create a Post
+ */
 exports.createPostValidator = (req, res, next) => {
   req.check("title", "Insert Title").notEmpty();
   req
@@ -22,12 +26,15 @@ exports.createPostValidator = (req, res, next) => {
   const errors = req.validationErrors();
   if (errors) {
     const firstError = errors.map((err) => err.msg)[0]; //first error instance gets logged
-    return res.status(400).json({error: firstError});
+    return res.status(400).json({ error: firstError });
   }
 
   next(); //so we dont get stuck
 };
 
+/**
+ * User Signup Validator method, checks 1 more time the minimum requirements needed to register
+ */
 exports.userSignupValidator = (req, res, next) => {
   req.check("name", "Insert Name").notEmpty();
   req.check("name", "Name length limited between 3 & 50 characters").isLength({
