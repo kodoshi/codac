@@ -1,16 +1,18 @@
 const express = require("express");
 const router = express.Router();
-const authController = require("../controllers/auth");
 const userController = require("../controllers/user");
-const validator = require("../validation/helper");
+const authController = require("../controllers/auth");
 
 /**
  * routes getting 'filtered' through middlewares
  */
 
-router.post("/signup", validator.userSignupValidator, authController.signup);
-router.post("/signin", authController.signin);
-router.get("/signout", authController.signout);
+router.get("/users", userController.allUsers);
+router.get(
+  "/user/:userId",
+  authController.requireSignin,
+  userController.getUser
+);
 
 router.param("userId", userController.userById); //userById() with be executed in routes that have :userId
 
