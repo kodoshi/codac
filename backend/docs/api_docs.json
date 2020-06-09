@@ -7,6 +7,8 @@
   "/post/new/:userId": "POST method, creates new post, needs userId",
   "/post/by/:userId": "GET method, get posts by a user, needs userId",
   "/post/:postId": "PUT/DELETE method, updates/deletes post, needs postId",
+  "/post/like": "PUT method, adds a like to a certain post",
+  "/post/unlike": "PUT method, removes a like from a certain post",
   "/users": "GET method, gets all users",
   "/user/:userId": "GET/PUT/DELETE method, gets/updates/deletes user, needs userId",
   "/user/follow": "PUT method, adds follower/followee",
