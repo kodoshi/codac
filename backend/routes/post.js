@@ -10,8 +10,8 @@ const validator = require("../validation/helper");
  */
 router.get("/posts", postController.getPost);
 
-router.put("/post/like", requireSignin, postController.like);
-router.put("/post/unlike", requireSignin, postController.unlike);
+router.put("/post/like", authController.requireSignin, postController.like);
+router.put("/post/unlike", authController.requireSignin, postController.unlike);
 
 router.post(
   "/post/new/:userId",
