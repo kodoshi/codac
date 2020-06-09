@@ -6,18 +6,34 @@ const authController = require("../controllers/auth");
 /**
  * routes getting 'filtered' through middlewares
  */
+router.put(
+  "/user/follow",
+  authController.requireSignin,
+  userController.addFollowing,
+  userController.addFollower
+);
+
+router.put(
+  "/user/unfollow",
+  authController.requireSignin,
+  userController.removeFollowing,
+  userController.removeFollower
+);
 
 router.get("/users", userController.allUsers);
+
 router.get(
   "/user/:userId",
   authController.requireSignin,
   userController.getUser
 );
+
 router.put(
   "/user/:userId",
   authController.requireSignin,
   userController.updateUser
 );
+
 router.delete(
   "/user/:userId",
   authController.requireSignin,

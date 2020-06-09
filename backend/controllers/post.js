@@ -24,9 +24,10 @@ exports.postById = (req, res, next, id) => {
 exports.getPost = (req, res) => {
   const posts = Post.find()
     .populate("posted_by", "_id name") //lets you reference documents in other collections, in out case the User model
-    .select("_id title body")
+    .select("_id title body created_at likes")
+    .sort({ created: -1 })
     .then((post) => {
-      res.json({ posts: post }); //default 200 http code
+      res.json({ post }); //default 200 http code
     })
     .catch((err) => console.log(err));
 };
@@ -67,6 +68,7 @@ exports.createPost = (req, res, next) => {
 exports.postsByUser = (req, res) => {
   Post.find({ posted_by: req.profile._id })
     .populate("posted_by", "_id name") //populate needs to be used because "_id name" is getting pulled from User model, not Post model
+    .select("_id title body created_at likes")
     .sort("_created") //earliest gets shown first
     .exec((err, posts) => {
       if (err) {
@@ -116,5 +118,43 @@ exports.deletePost = (req, res) => {
       return res.status(400).json({ error: err });
     }
     res.json({ message: "Post was deleted" });
+  });
+};
+
+/**
+ * Like method, userId that likes a post gets added to that posts 'likes' column in the DB
+ */
+exports.like = (req, res) => {
+  Post.findByIdAndUpdate(
+    req.body.postId, //comes from frontend
+    {
+      $push: { likes: req.body.userId },
+    },
+    { new: true } //needed for mongoose so it returns updated resource
+  ).exec((err, result) => {
+    if (err) {
+      return res.status(400).json({ error: err });
+    } else {
+      res.json(result);
+    }
+  });
+};
+
+/**
+ * Unlike method, userId that unlikes a post gets removed from that posts 'likes' column in the DB
+ */
+exports.unlike = (req, res) => {
+  Post.findByIdAndUpdate(
+    req.body.postId, //comes from frontend
+    {
+      $pull: { likes: req.body.userId },
+    },
+    { new: true } //needed for mongoose so it returns updated resource
+  ).exec((err, result) => {
+    if (err) {
+      return res.status(400).json({ error: err });
+    } else {
+      res.json(result);
+    }
   });
 };
