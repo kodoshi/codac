@@ -1,27 +1,7 @@
 import React from 'react';
 import { withRouter } from "react-router";
 import {Link } from 'react-router-dom';
-import { isAuthenticated} from '../auth/file.js';
-
-
-
-/**
- *  method: if the token exists in the localStorage remove it.
- * Make request to the server and take the json response of it.  
-*/
-  export const signout = next => {
-  if(typeof window !== "undefined") 
-    localStorage.removeItem("tokenkey")
-    next()
-  return  fetch("http://localhost:4242/signout", {
-    method: "GET"
-  })
-  .then((response) => {
-    return response.json()
-  })
-  .catch(err => {console.log(err)})
-}
-
+import { signout, isAuthenticated} from '../auth/file.js';
 
 
 class Navigation extends React.Component {
@@ -39,6 +19,13 @@ class Navigation extends React.Component {
     <li className="nav-item">
 		<Link className="nav-link" to="/"> Home </Link> 
 	</li>
+	<li className="nav-item">
+			<Link 
+			className="nav-link text-primary" 
+			to={'/users/'}> Users 
+			</Link>
+		 
+		</li>
 	{!isAuthenticated() && (
 		<React.Fragment>
 			<li className="nav-item">
@@ -53,11 +40,11 @@ class Navigation extends React.Component {
 	{isAuthenticated() && (
 		<React.Fragment>
 		<li className="nav-item">
-			<a 
+			<span
 			className="nav-link text-primary" style={{cursor: "pointer"}}
 			onClick={() => signout(() => this.props.history.push('/'))}> 
 			Signout 
-			</a> 
+			</span> 
 		</li>
 		<li className="nav-item">
 			<Link 
@@ -67,6 +54,7 @@ class Navigation extends React.Component {
 		 
 		</li>
 		</React.Fragment>
+
 	)}
     </ul>
   </div>

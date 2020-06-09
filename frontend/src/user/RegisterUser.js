@@ -27,6 +27,14 @@ class RegisterUser extends React.Component {
     });
   }
 
+/**
+ * Register method: make a http request to the server.
+ * take the response object from the server
+ * if there is an error change the error state and display the error on the frontend side
+ * if no error make the right redirection after register 
+*/
+
+
   registertodb() {
    
     const { name, email, password } = this.state;
@@ -35,21 +43,17 @@ class RegisterUser extends React.Component {
       email,
       password,
     }
- // send the http request to the server
- fetch("http://localhost:4242/signup", {
+ fetch(`${process.env.REACT_APP_API_URL}/signup`, {
       method: "POST",
       body: JSON.stringify(user),
       headers: {
         "Content-Type": "application/json"
       }
-      // take the response object from the server
     }).then(function(response) {
       return response.json()
     }).then(data => {
-      //if there is an error change the error
     if (data.error) this.setState({error: data.error})
       else 
-      // redirect to ligin page 
         this.props.history.push("/signin"); 
 
   }).catch((err) =>{

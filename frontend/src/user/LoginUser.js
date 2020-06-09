@@ -22,16 +22,26 @@ class LoginUser extends Component {
       [name]: value,
     });
   }
+
+/**
+ * Authenticate method: if the token exists save it to the localStorage.
+ * redirect to homepage
+*/
+
   authenticate(tokenkey, next){
       if(typeof window !== "undifined"){
-        //save the token to the localStorage
         localStorage.setItem("tokenkey", JSON.stringify(tokenkey))
-        // redirect to userprofile page
         this.props.history.push("/"); 
-
         next();
       }
     }
+
+/**
+ * Login method: make a http request to the server.
+ * take the response object from the server
+ * if there is an error change the error state
+ * if no error make the authentication and the right redirection after login 
+*/
 
 loginuser() {
    
@@ -42,25 +52,19 @@ loginuser() {
     }
     console.log(user)
     
- // send the http request to the server
-fetch("http://localhost:4242/signin", {
+fetch(`${process.env.REACT_APP_API_URL}/signin`, {
       method: "POST",
       body: JSON.stringify(user),
       headers: {
         "Content-Type": "application/json"
       }
-      // take the response object from the server
     }).then(function(response) {
       return response.json()
     }).then(data => {
-      //if there is an error change the error state
     if (data.error) this.setState({error: data.error})
       else 
-      //authenticate
       this.authenticate(data)
-
-
-  }).catch((err) =>{
+    }).catch((err) =>{
         console.log(err)
     });
 
