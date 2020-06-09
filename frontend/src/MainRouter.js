@@ -4,6 +4,7 @@ import HomePage from './home/HomePage';
 import RegisterUser from './user/RegisterUser';
 import LoginUser from './user/LoginUser';
 import Navigation from './home/Navigation'; 
+import UserProfile from './user/UserProfile'; 
 
 
 class MainRouter extends React.Component {
@@ -14,8 +15,10 @@ render() {
 		<Navigation />
 		<Switch>
 			<Route exact path="/" component={HomePage} />
-			<Route  path="/signup" component={RegisterUser} />
-			<Route  path="/signin" component={LoginUser} />
+			<Route exact path="/signup" component={RegisterUser} />
+			<Route exact path="/signin" component={LoginUser} />
+			<Route exact path="/user/:userId" component={UserProfile} />
+
 
 
 
