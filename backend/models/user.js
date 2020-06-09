@@ -36,6 +36,20 @@ const userSchema = new mongoose.Schema({
   updated_at: {
     type: Date,
   },
+
+  photo: {
+    data: Buffer,
+    contentType: String,
+  },
+
+  about: {
+    type: String,
+    trim: true,
+  },
+
+  following: [{ type: mongoose.Schema.ObjectId, ref: "User" }],
+
+  followers: [{ type: mongoose.Schema.ObjectId, ref: "User" }],
 });
 
 /**

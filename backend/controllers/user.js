@@ -5,13 +5,16 @@ const _ = require("lodash");
  * User by ID function, fills req.profile object with the user that corresponds to the ID given
  */
 exports.userById = (req, res, next, id) => {
-  User.findById(id).exec((err, user) => {
-    if (err || !user) {
-      return res.status(400).json({ error: "User not found" });
-    }
-    req.profile = user; //profile object in request gets user info
-    next(); //so we dont get stuck
-  });
+  User.findById(id)
+    .populate("following", "_id name")
+    .populate("followers", "_id name")
+    .exec((err, user) => {
+      if (err || !user) {
+        return res.status(400).json({ error: "User not found" });
+      }
+      req.profile = user; //profile object in request gets user info
+      next(); //so we dont get stuck
+    });
 };
 
 /**
@@ -89,4 +92,84 @@ exports.deleteUser = (req, res, next) => {
     }
     res.json({ message: "User deletion successful" });
   });
+};
+
+/**
+ * Add Following method, gets current user id from request.body and updates the following DB field with the followId of another user
+ */
+exports.addFollowing = (req, res, next) => {
+  User.findByIdAndUpdate(
+    req.body.userId, //sent from frontend
+    {
+      $push: { following: req.body.followId }, //sent from frontend
+    },
+    (err, result) => {
+      if (err) {
+        return res.status(400).json({ error: err });
+      }
+      next();
+    }
+  );
+};
+
+/**
+ * Add Follower method, gets current followId from request.body and updates the followers DB field with the userId of another user
+ */
+exports.addFollower = (req, res, next) => {
+  User.findByIdAndUpdate(
+    req.body.followId, //sent from frontend
+    {
+      $push: { followers: req.body.userId }, //sent from frontend
+    },
+    { new: true }
+  )
+    .populate("following", "_id name")
+    .exec((err, result) => {
+      if (err) {
+        return res.status(400).json({ error: err });
+      }
+      result.hashed_password = undefined; //result will contain user and his following list, in json format
+      result.salt = undefined;
+      res.json(result);
+    });
+};
+
+/**
+ * Remove Following method, gets current user id from request.body and removes from the following DB field the unfollowId of another user
+ */
+exports.removeFollowing = (req, res, next) => {
+  User.findByIdAndUpdate(
+    req.body.userId, //sent from frontend
+    {
+      $pull: { following: req.body.unfollowId }, //sent from frontend
+    },
+    (err, result) => {
+      if (err) {
+        return res.status(400).json({ error: err });
+      }
+      next();
+    }
+  );
+};
+
+/**
+ * Remove Follower method, gets current followId from request.body and removes from the followers DB field the userId of another user
+ */
+exports.removeFollower = (req, res, next) => {
+  User.findByIdAndUpdate(
+    req.body.unfollowId, //sent from frontend
+    {
+      $pull: { followers: req.body.userId }, //sent from frontend
+    },
+    { new: true }
+  )
+    .populate("following", "_id name")
+    .exec((err, result) => {
+      if (err) {
+        return res.status(400).json({ error: err });
+      }
+      result.hashed_password = undefined; //result will contain user and his following list, in json format
+      result.salt = undefined;
+      res.json(result);
+    });
 };
