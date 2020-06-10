@@ -9,6 +9,8 @@ const _ = require("lodash");
 exports.postById = (req, res, next, id) => {
   Post.findById(id)
     .populate("posted_by", "_id name") //needed to communicate with User model, that holds (user) _id and name
+    .populate("comments", "text created_at")
+    .populate("comments.posted_by", "_id name")
     .exec((err, post) => {
       if (err || !post) {
         return res.status(400).json({ error: err });
@@ -24,6 +26,8 @@ exports.postById = (req, res, next, id) => {
 exports.getPost = (req, res) => {
   const posts = Post.find()
     .populate("posted_by", "_id name") //lets you reference documents in other collections, in out case the User model
+    .populate("comments", "text created_at")
+    .populate("comments.posted_by", "_id name")
     .select("_id title body created_at likes")
     .sort({ created: -1 })
     .then((post) => {
@@ -121,6 +125,15 @@ exports.deletePost = (req, res) => {
   });
 };
 
+exports.photo = (req, res, next) => {
+  res.set("Content-Type", req.post.photo.contentType);
+  return res.send(req.post.photo.data);
+};
+
+exports.singlePost = (req, res) => {
+  return res.json(req.post);
+};
+
 /**
  * Like method, userId that likes a post gets added to that posts 'likes' column in the DB
  */
@@ -155,6 +168,86 @@ exports.unlike = (req, res) => {
       return res.status(400).json({ error: err });
     } else {
       res.json(result);
+    }
+  });
+};
+
+/**
+ * Comment method
+ */
+exports.comment = (req, res) => {
+  let comment = req.body.comment;
+  comment.posted_by = req.body.userId; //userId comes from frontend
+
+  Post.findByIdAndUpdate(
+    req.body.postId, //comes from frontend
+    {
+      $push: { comments: comment },
+    },
+    { new: true } //needed for mongoose so it returns updated resource
+  )
+    .populate("comments.posted_by", "_id name")
+    .populate("posted_by", "_id name")
+    .exec((err, result) => {
+      if (err) {
+        return res.status(400).json({ error: err });
+      } else {
+        res.json(result);
+      }
+    });
+};
+
+/**
+ * Uncomment method
+ */
+exports.uncomment = (req, res) => {
+  let comment = req.body.comment;
+
+  Post.findByIdAndUpdate(
+    req.body.postId, //comes from frontend
+    {
+      $pull: { comments: { _id: comment._id } },
+    },
+    { new: true } //needed for mongoose so it returns updated resource
+  )
+    .populate("comments.posted_by", "_id name")
+    .populate("posted_by", "_id name")
+    .exec((err, result) => {
+      if (err) {
+        return res.status(400).json({ error: err });
+      } else {
+        res.json(result);
+      }
+    });
+};
+
+exports.updateComment = (req, res) => {
+  let comment = req.body.comment;
+
+  Post.findByIdAndUpdate(req.body.postId, {
+    $pull: { comments: { _id: comment._id } },
+  }).exec((err, result) => {
+    if (err) {
+      return res.status(400).json({
+        error: err,
+      });
+    } else {
+      Post.findByIdAndUpdate(
+        req.body.postId,
+        { $push: { comments: comment, updated: new Date() } },
+        { new: true }
+      )
+        .populate("comments.posted_by", "_id name")
+        .populate("posted_by", "_id name")
+        .exec((err, result) => {
+          if (err) {
+            return res.status(400).json({
+              error: err,
+            });
+          } else {
+            res.json(result);
+          }
+        });
     }
   });
 };

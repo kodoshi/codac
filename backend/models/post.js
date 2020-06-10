@@ -28,7 +28,7 @@ const postSchema = new mongoose.Schema({
 
   created_at: {
     type: Date,
-    default: Date.now(),
+    default: Date.now,
   },
 
   updated_at: {
@@ -36,6 +36,14 @@ const postSchema = new mongoose.Schema({
   },
 
   likes: [{ type: mongoose.Schema.ObjectId, ref: "User" }],
+
+  comments: [
+    {
+      text: String,
+      created_at: { type: Date, default: Date.now },
+      posted_by: { type: mongoose.Schema.ObjectId, ref: "User" },
+    },
+  ],
 });
 
 module.exports = mongoose.model("Post", postSchema);

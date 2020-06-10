@@ -13,6 +13,17 @@ router.get("/posts", postController.getPost);
 router.put("/post/like", authController.requireSignin, postController.like);
 router.put("/post/unlike", authController.requireSignin, postController.unlike);
 
+router.put(
+  "/post/comment",
+  authController.requireSignin,
+  postController.comment
+);
+router.put(
+  "/post/uncomment",
+  authController.requireSignin,
+  postController.uncomment
+);
+
 router.post(
   "/post/new/:userId",
   authController.requireSignin,
