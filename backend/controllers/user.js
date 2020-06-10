@@ -1,5 +1,7 @@
 const User = require("../models/user");
 const _ = require("lodash");
+const formidable = require("formidable");
+const fs = require("fs");
 
 /**
  * User by ID function, fills req.profile object with the user that corresponds to the ID given
@@ -63,21 +65,42 @@ exports.getUser = (req, res) => {
 
 /**
  * Update User function that edits the user inside the req.profile with lodash.extend method,
- * date of update gets persisted in the DB and updated user is returned in the response
+ * date of update gets persisted in the DB and updated user is returned in the response,
+ * photo uploaded gets saved in the DB with formidable package
  */
 exports.updateUser = (req, res, next) => {
-  let user = req.profile;
-  user = _.extend(user, req.body); //lodash changes the user object with the added info from the request body
-  user.updated_at = Date.now(); //date of update gets logged to be saved in the DB below
-  user.save((err) => {
+  let form = new formidable.IncomingForm();
+  // console.log("incoming form data: ", form);
+  form.keepExtensions = true; //saving photo .extention
+  form.parse(req, (err, fields, files) => {
     if (err) {
-      return res
-        .status(400)
-        .json({ error: "Not authorized to edit this content" });
+      return res.status(400).json({
+        error: "Picture upload failed",
+      });
     }
-    user.hashed_password = undefined; //not sent to the front-end, security-based omission
-    user.salt = undefined; //not sent to the front-end, security-based omission
-    res.json({ user });
+    let user = req.profile; //defined in userById method above
+    // console.log("user in update: ", user);
+    user = _.extend(user, fields); //lodash changes the user object with the added info from the fields
+    user.updated_at = Date.now(); //date of update gets logged to be saved in the DB below
+    // console.log("USER FORM DATA UPDATE: ", user);
+
+    if (files.photo) {
+      //handle the incoming picture, persist it in the DB
+      user.photo.data = fs.readFileSync(files.photo.path);
+      user.photo.contentType = files.photo.type;
+    }
+
+    user.save((err, result) => {
+      if (err) {
+        return res.status(400).json({
+          error: err,
+        });
+      }
+      user.hashed_password = undefined; //security based omision
+      user.salt = undefined; //security based omision
+      // console.log("user after update with formdata: ", user);
+      res.json(user);
+    });
   });
 };
 
