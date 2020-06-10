@@ -14,9 +14,32 @@ export const readuserdata = (userId, tokenkey) => {
   })
   .then(response => {
     return response.json()
-  })
+  }).catch((err) =>{
+        console.log(err)
+    });
 };
 
+/**
+ * Update information method: make a http request to the server.
+ * take the response object from the server
+ * and return json response
+*/
+export const update = (userId, tokenkey, user) => {
+  console.log("USER PROFILE HAS CHANGED", user)
+  return fetch(`${process.env.REACT_APP_API_URL}/user/${userId}`, {
+    method: "PUT",
+    headers: {
+      Accept: "application/json",
+      Authorization: `Bearer ${tokenkey}`
+      },
+      body: user
+  })
+  .then(response => {
+    return response.json()
+  }).catch((err) =>{
+        console.log(err)
+    });
+};
 
 /**
  * Delete user Account method: make a http request to the server.
@@ -34,7 +57,9 @@ export const remove = (userId, tokenkey) => {
   })
   .then(response => {
     return response.json()
-  })
+  }).catch((err) =>{
+        console.log(err)
+    });
 }
 
 /**
@@ -45,10 +70,12 @@ export const remove = (userId, tokenkey) => {
 */
 
 export const listusers= ()=>{
-	return fetch(`${process.env.REACT_APP_API_URL}/users/`, {
+  return fetch(`${process.env.REACT_APP_API_URL}/users/`, {
     method: "GET",
   })
   .then(response => {
     return response.json()
-  })
+  }).catch((err) =>{
+        console.log(err)
+    });
 }

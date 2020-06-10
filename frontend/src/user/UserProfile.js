@@ -20,8 +20,9 @@ constructor(props) {
   }
 
 /**
- * Handle the response object from readuserdata method
- * if no error set State with data and display user information in the right form
+*
+* Handle the response object from readuserdata method
+* if no error set State with data and display user information in the right form
  * if error make a redirection to the signin page -> it means you are not logged in
 */
 
@@ -78,7 +79,7 @@ render() {
         className="d-inline-block mt-5">
           <Link 
           className="btn btn-raised btn-success mr-5"
-          to={`/user/edit/` + this.state.user._id}>
+          to={`/user/edit/${this.state.user._id}`}>
           Edit Profile
           </Link>
         </div>

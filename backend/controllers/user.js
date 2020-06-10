@@ -68,7 +68,7 @@ exports.getUser = (req, res) => {
  * date of update gets persisted in the DB and updated user is returned in the response,
  * photo uploaded gets saved in the DB with formidable package
  */
-exports.updateUser = (req, res, next) => {
+        exports.updateUser = (req, res, next) => {
   let form = new formidable.IncomingForm();
   // console.log("incoming form data: ", form);
   form.keepExtensions = true; //saving photo .extention
@@ -102,7 +102,7 @@ exports.updateUser = (req, res, next) => {
       res.json(user);
     });
   });
-};
+}
 
 /**
  * Delete User function, gets current user from req.profile, removes it and returns a json success message
