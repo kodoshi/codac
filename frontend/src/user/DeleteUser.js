@@ -56,4 +56,4 @@ render() {
 	
 }
 
-export default withRouter(DeleteUser);
+export default withRouter(DeleteUser);  

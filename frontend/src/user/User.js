@@ -4,7 +4,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faUsers } from "@fortawesome/fontawesome-free-solid";
 import { Link } from 'react-router-dom';
 import { listusers } from './apiUsers.js';
-import profileimg from '../profileimg/img.jpg';
+import profileimg from '../profileimg/icon.jpg';
 
 
 class User extends React.Component {
@@ -36,19 +36,20 @@ componentDidMount() {
 
 render() {
     return (
-      <div className="container bg-secondary">
+      <div className="welcome">
+      <div className="container bg-dark">
 
 
 
-<h2 className="control-group card container text-center bg-secondary font1"> <p><FontAwesomeIcon icon={faUsers} /></p>  See All Users  </h2>
-  <div className="text-center">
+<h2 className="control-group card container text-center bg-dark font1"> <p><FontAwesomeIcon icon={faUsers} /></p>  See All Users  </h2>
+  <div className="text-center container">
 
   {
     this.state.users.map((user, index) => 
-    <div className="jumbotron bg-light " key={index}>
+    <div className="jumbotron  bg-light text-dark " key={index}>
       <img className= "card-img-top" src={profileimg} alt={user.name} style={{width: '15%'}}/>
       <h2 className="text-dark"><b><i>{user.name}</i></b> </h2>
-      <p><i>{user.email}</i></p>  <Link to={`/user/${user._id}`} className="btn text-light bg-primary"> View Profile </Link>
+      <p><i>{user.email}</i></p>  <Link to={`/user/${user._id}`} className="btn text-light bg-dark"> View Profile </Link>
 
 
     </div> 
@@ -58,6 +59,8 @@ render() {
 </div>
 
 </div>
+</div>
+
 
       );
   }

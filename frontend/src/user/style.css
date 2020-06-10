@@ -45,14 +45,20 @@ background: -webkit-linear-gradient(black, red);
 
 .welcome::before{
 content: "";
-background-image: url('foto2.jpg');
+
+background-image: url("foto2.jpg");
+display: flex;
+justify-content: center;
+align-items: center;
+min-height: 100vh;
 background-size: cover;
-position: absolute;
+background-repeat: no-repeat;
+position: fixed;
 top: 0px;
 right: 0px;
 bottom: 0px;
 left: 0px;
-opacity: 0.2;
+opacity: 0.3;
 }
 
 .cont1
@@ -77,3 +83,5 @@ font-size: 250%;
 	color: #f2f2f2;
 
 }
+
+

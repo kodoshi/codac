@@ -3,7 +3,7 @@ import { isAuthenticated } from "../auth/file.js";
 import { withRouter } from "react-router";
 import { Link } from 'react-router-dom';
 import { readuserdata } from './apiUsers.js';
-import profileimg from '../profileimg/img.jpg';
+import profileimg from '../profileimg/icon.jpg';
 import DeleteUser from './DeleteUser';
 
 
@@ -59,7 +59,7 @@ render() {
             <h2 className= "control-group container text-center bg-secondary font1">User Profile:</h2>
             
                 
-            <div className="container text-center bg-secondary font">
+            <div className="container text-center bg-dark font">
          <img className= "card-img-top" src={profileimg} alt={this.state.user.name} style={{width: '15%'}}/>
 
 
