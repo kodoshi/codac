@@ -1,7 +1,8 @@
 
 /**
- * Signout method: if the token exists in the localStorage remove it.
- * Make request to the server and take the json response of it.  
+* @param {*} next allows the method to go to the next middleware
+* Signout method: if the token exists in the localStorage remove it.
+* Make request to the server and take the json response of it.  
 */
   export const signout = next => {
   if(typeof window !== "undefined") 

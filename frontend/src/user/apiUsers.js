@@ -1,7 +1,9 @@
 /**
- * GetUser information method: make a http request to the server.
- * take the response object from the server
- * and return json response
+* @param {*} userId id of the user in the url 
+* @param {*} tokenkey token that is saved in localStorage.
+* GetUser information method: make a http request to the server.
+* take the response object from the server
+* and return json response
 */
 export const readuserdata = (userId, tokenkey) => {
   return fetch(`${process.env.REACT_APP_API_URL}/user/${userId}`, {
@@ -20,9 +22,12 @@ export const readuserdata = (userId, tokenkey) => {
 };
 
 /**
- * Update information method: make a http request to the server.
- * take the response object from the server
- * and return json response
+* @param {*} userId id of the user in the url 
+* @param {*} tokenkey token that is saved in localStorage
+* @param {*} user object that is on the State
+* Update information method: make a http request to the server.
+* take the response object from the server
+* and return json response
 */
 export const update = (userId, tokenkey, user) => {
   console.log("USER PROFILE HAS CHANGED", user)
@@ -42,9 +47,11 @@ export const update = (userId, tokenkey, user) => {
 };
 
 /**
- * Delete user Account method: make a http request to the server.
- * take the response object from the server
- * and return json response
+* @param {*} userId id of the user in the url 
+* @param {*} tokenkey token that is saved in localStorage
+* Delete user Account method: make a http request to the server.
+* take the response object from the server
+* and return json response
 */
 export const remove = (userId, tokenkey) => {
   return fetch(`${process.env.REACT_APP_API_URL}/user/${userId}`, {
@@ -81,6 +88,8 @@ export const listusers= ()=>{
 }
 
 /**
+* @param {*} user object that is saved in the localStorage 
+* @param {*} next allows the method to go to the next middleware
 * updateUser method: update user in the local storage.
 * First check if token exists in the localStorage, so the user is authenticated.
 * then check if the token key is given and get the localStorage infos and upadate the user

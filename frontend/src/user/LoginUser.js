@@ -25,8 +25,10 @@ class LoginUser extends Component {
   }
 
 /**
- * Authenticate method: if the token exists save it to the localStorage.
- * redirect to homepage
+* @param {*} tokenkey token that is saved in localStorage.
+* @param {*} next allows the method to go to the next middleware
+* Authenticate method: if the token exists save it to the localStorage.
+* redirect to homepage
 */
 
   authenticate(tokenkey, next){
