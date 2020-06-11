@@ -4,7 +4,9 @@ const express_jwt = require("express-jwt");
 const config = require("../config/config");
 
 /**
- * Sign Up function currently, queries and selections to/from db are made here with standart MongoDB methods, json response is being returned
+ * @param {*} req HTTP request from express
+ * @param {*} res HTTP response from express
+ * Sign Up method, queries and selections to/from db are made here with standart MongoDB methods, json response is being returned
  */
 exports.signup = async (req, res) => {
   const userExists = await User.findOne({ email: req.body.email });
@@ -20,7 +22,9 @@ exports.signup = async (req, res) => {
 };
 
 /**
- * Sign in function currently, queries and selections to/from db are made here with standart MongoDB methods, json response is being returned
+ * @param {*} req HTTP request from express
+ * @param {*} res HTTP response from express
+ * Sign in method, queries and selections to/from db are made here with standart MongoDB methods, json response is being returned
  */
 exports.signin = (req, res) => {
   const { email, password } = req.body;
@@ -44,16 +48,23 @@ exports.signin = (req, res) => {
     return res.json({ token, user: { _id, email, name } }); //sending the user and his token to frontend
   });
 };
+
 /**
- * Logout function, to log out we just clear the cookie that holds the token
+ * @param {*} req HTTP request from express
+ * @param {*} res HTTP response from express
+ * Logout method, to log out we just clear the cookie that holds the token
  */
 exports.signout = (req, res) => {
   res.clearCookie("monedhe"); //to log out we clear the token
   return res.json({ message: "Sign out successful" });
 };
 
+/**
+ * @param {*} req HTTP request from express
+ * @param {*} res HTTP response from express
+ * Require Signin method, if json web token is valid, express jwt adds the verified id to the request object
+ */
 exports.requireSignin = express_jwt({
-  //if json web token is valid, express jwt adds the verified id to the request object
   secret: config.JWT_SECRET,
   userProperty: "auth",
 });

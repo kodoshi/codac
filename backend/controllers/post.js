@@ -4,6 +4,10 @@ const fs = require("fs");
 const _ = require("lodash");
 
 /**
+ * @param {*} req HTTP request from express
+ * @param {*} res HTTP response from express
+ * @param {*} next allows the method to go to the next middleware
+ * @param {string} id holds individual _id of user
  * Post by Id method, finds post by an ID and assigns it to req.post object, or returns 400 http code with a json error
  */
 exports.postById = (req, res, next, id) => {
@@ -16,11 +20,13 @@ exports.postById = (req, res, next, id) => {
         return res.status(400).json({ error: err });
       }
       req.post = post;
-      next(); //we continue on the next middleware
+      next();
     });
 };
 
 /**
+ * @param {*} req HTTP request from express
+ * @param {*} res HTTP response from express
  * Get Post function currently, queries and selections to/from db are made here with standart MongoDB methods, json response is being returned
  */
 exports.getPost = (req, res) => {
@@ -37,6 +43,9 @@ exports.getPost = (req, res) => {
 };
 
 /**
+ * @param {*} req HTTP request from express
+ * @param {*} res HTTP response from express
+ * @param {*} next allows the method to go to the next middleware
  * formidable package methods being used to handle image upload within the post
  * Create Post function currently, queries and selections to/from db are made here with standart MongoDB methods, json response is being returned
  */
@@ -67,6 +76,8 @@ exports.createPost = (req, res, next) => {
 };
 
 /**
+ * @param {*} req HTTP request from express
+ * @param {*} res HTTP response from express
  * Posts by User function currently, queries and selections to/from db are made here with standart MongoDB methods, json response is being returned
  */
 exports.postsByUser = (req, res) => {
@@ -85,6 +96,9 @@ exports.postsByUser = (req, res) => {
 };
 
 /**
+ * @param {*} req HTTP request from express
+ * @param {*} res HTTP response from express
+ * @param {*} next allows the method to go to the next middleware
  * Is Poster method, checks if req.post and req.auth exist and that the ID of the User that posted that specific post matches with the User ID currently authorized
  */
 exports.isPoster = (req, res, next) => {
@@ -97,6 +111,9 @@ exports.isPoster = (req, res, next) => {
 };
 
 /**
+ * @param {*} req HTTP request from express
+ * @param {*} res HTTP response from express
+ * @param {*} next allows the method to go to the next middleware
  * Update Post function that edits the post inside the req.post with lodash.extend method,
  * date of update gets persisted in the DB and updated post is returned in the response
  */
@@ -113,6 +130,8 @@ exports.updatePost = (req, res, next) => {
 };
 
 /**
+ * @param {*} req HTTP request from express
+ * @param {*} res HTTP response from express
  * Delete Post method, gets a post from req.body object, removes it and returns a json success message
  */
 exports.deletePost = (req, res) => {
@@ -125,16 +144,30 @@ exports.deletePost = (req, res) => {
   });
 };
 
+/**
+ * @param {*} req HTTP request from express
+ * @param {*} res HTTP response from express
+ * @param {*} next allows the method to go to the next middleware
+ * Photo method, sets the response’s HTTP header field to the extention that the picture has
+ * (eg: .png . jpeg  etc...), and sends the data of the file itself in the response
+ */
 exports.photo = (req, res, next) => {
   res.set("Content-Type", req.post.photo.contentType);
   return res.send(req.post.photo.data);
 };
 
+/**
+ * @param {*} req HTTP request from express
+ * @param {*} res HTTP response from express
+ * Single Post method, returns a single post in json format
+ */
 exports.singlePost = (req, res) => {
   return res.json(req.post);
 };
 
 /**
+ * @param {*} req HTTP request from express
+ * @param {*} res HTTP response from express
  * Like method, userId that likes a post gets added to that posts 'likes' column in the DB
  */
 exports.like = (req, res) => {
@@ -154,6 +187,8 @@ exports.like = (req, res) => {
 };
 
 /**
+ * @param {*} req HTTP request from express
+ * @param {*} res HTTP response from express
  * Unlike method, userId that unlikes a post gets removed from that posts 'likes' column in the DB
  */
 exports.unlike = (req, res) => {
@@ -173,7 +208,9 @@ exports.unlike = (req, res) => {
 };
 
 /**
- * Comment method
+ * @param {*} req HTTP request from express
+ * @param {*} res HTTP response from express
+ * Comment method, takes from frontend request, checks/operates on DB and returns results in json
  */
 exports.comment = (req, res) => {
   let comment = req.body.comment;
@@ -198,7 +235,9 @@ exports.comment = (req, res) => {
 };
 
 /**
- * Uncomment method
+ * @param {*} req HTTP request from express
+ * @param {*} res HTTP response from express
+ * Uncomment method, takes from frontend request, checks/operates on DB and returns results in json
  */
 exports.uncomment = (req, res) => {
   let comment = req.body.comment;
@@ -221,6 +260,11 @@ exports.uncomment = (req, res) => {
     });
 };
 
+/**
+ * @param {*} req HTTP request from express
+ * @param {*} res HTTP response from express
+ * Update Comment method, takes from frontend request, checks/operates on DB and returns results in json
+ */
 exports.updateComment = (req, res) => {
   let comment = req.body.comment;
 
