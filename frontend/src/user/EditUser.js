@@ -2,9 +2,9 @@ import React from "react";
 import { isAuthenticated } from "../auth/file.js";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faEdit } from "@fortawesome/fontawesome-free-solid";
-
+import profileimg from '../profileimg/icon.jpg';
 import { withRouter } from "react-router";
-import { update, readuserdata} from './apiUsers.js';
+import { update, readuserdata, updateUser} from './apiUsers.js';
 
 
 class EditUser extends React.Component {
@@ -17,7 +17,9 @@ constructor(props) {
       email: "",
       password: "",
       id: "", 
-      error: ""
+      about: "", 
+      error: "", 
+      fileSize: 0
     };
   }
 
@@ -39,7 +41,7 @@ componentDidMount() {
       this.props.history.push(`../${this.state.id}`)
     }
     else 
-      this.setState({id: data._id, name: data.name, email:data.email});
+      this.setState({id: data._id, name: data.name, email:data.email, about:data.about});
   });
 
   
@@ -51,12 +53,16 @@ componentDidMount() {
 */
 
 validate (){
-    const { name, email, password } = this.state;
+    const { name, email, password, fileSize} = this.state;
+    if (fileSize > 10000) {
+      this.setState({error: "Filesize should be less than 100kb "})
+      return false;
+    }
     if (name.length === 0) {
       this.setState({error: "Name is required"})
       return false;
     }
-    if (!/.+\@.+\..+/.test(email)) {
+    if (!/.+@.+\..+/.test(email)) {
       this.setState({error: "Email should be in the right format"})
       return false;
     }
@@ -68,14 +74,17 @@ validate (){
 }
 
 handleChange = name => event => {
+  this.setState({error: ""});
     
     //if the name is 'photo' take event.target.files the first []
     const value = name === 'photo' ? event.target.files[0] :event.target.value
+    //get the fileSize and save it to the state if the size is not defined get the default value of fileSize
+    const fileSize = name === 'photo' ? event.target.files[0].size: 0;
 
     //save the values on the userData 
     this.userData.set(name, value)
 
-    this.setState({[name]: value});
+    this.setState({[name]: value, fileSize});
   }
 
 /**
@@ -101,7 +110,11 @@ editprofile () {
      if (data.error) 
       this.setState({error: data.error})
      else 
-      this.props.history.push(`../${this.state.id}`)
+      updateUser(data, () => {
+      //console.log(data)
+       this.props.history.push(`../${this.state.id}`)
+
+      })
     }) 
  }
     
@@ -111,12 +124,24 @@ editprofile () {
 
 
 render() {
+const userId = this.props.match.params.userId;
+//show the image on the edit user profile after upload, if no image show the default imgage
+const photoUrl = this.state.id ? `${process.env.REACT_APP_API_URL}/user/photo/${userId}?${new Date().getTime()}` : profileimg
     return (
 <div className="edit">
-      <div className="container cont ">
+      <div className="container cont">
         <h2 className="mt-5 mb-5 text-center font1">
           <FontAwesomeIcon icon={faEdit} /> Edit Profile
         </h2>
+        <img 
+        src={photoUrl} 
+        alt={this.state.name}
+        
+        className="card-img-top"
+        style={{width: '20%'}}
+        onError = {index => (index.target.src = `${profileimg}`)}
+
+        />
         
          <div 
          className="alert alert-danger"
@@ -142,6 +167,18 @@ render() {
             value={this.state.name}
             className="form-control bg-light"
             name="name"
+            required
+          />
+        </div>
+        <div className="form-group">
+          <label className="text-light font">About me: </label>
+          <textarea
+            type="text"
+            onChange={this.handleChange("about")}
+            value={this.state.about}
+            className="form-control bg-light"
+            name="about"
+            maxLength="300"
             required
           />
         </div>

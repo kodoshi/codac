@@ -14,6 +14,7 @@ class LoginUser extends Component {
   }
 
   handleChange(event) {
+      
     const target = event.target;
     const value = target.value;
     const name = target.name;
@@ -29,7 +30,8 @@ class LoginUser extends Component {
 */
 
   authenticate(tokenkey, next){
-      if(typeof window !== "undifined"){
+    if(typeof window !== "undefined")
+      {
         localStorage.setItem("tokenkey", JSON.stringify(tokenkey))
         this.props.history.push("/"); 
         next();

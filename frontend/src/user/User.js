@@ -35,19 +35,28 @@ componentDidMount() {
 
 
 render() {
+
     return (
       <div className="welcome">
-      <div className="container bg-dark">
+      <div className="container">
 
 
 
-<h2 className="control-group card container text-center bg-dark font1"> <p><FontAwesomeIcon icon={faUsers} /></p>  See All Users  </h2>
-  <div className="text-center container">
+<h2 className="control-group  cont2 text-center  font1"><FontAwesomeIcon icon={faUsers} /> See All Users  </h2>
+  <div className="text-center cont2">
 
   {
+    //loop on all users  
     this.state.users.map((user, index) => 
-    <div className="jumbotron  bg-light text-dark " key={index}>
-      <img className= "card-img-top" src={profileimg} alt={user.name} style={{width: '15%'}}/>
+    <div className="jumbotron bg-light text-dark " key={index}>
+      <img 
+      className= "card-img-top" 
+      src={`${process.env.REACT_APP_API_URL}/user/photo/${user._id}`} 
+      alt={user.name}
+      style={{width: '20%'}}
+      onError = {index => (index.target.src = `${profileimg}`)}
+      />
+      
       <h2 className="text-dark"><b><i>{user.name}</i></b> </h2>
       <p><i>{user.email}</i></p>  <Link to={`/user/${user._id}`} className="btn text-light bg-dark"> View Profile </Link>
 

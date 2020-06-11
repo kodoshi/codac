@@ -79,3 +79,26 @@ export const listusers= ()=>{
         console.log(err)
     });
 }
+
+/**
+* updateUser method: update user in the local storage.
+* First check if token exists in the localStorage, so the user is authenticated.
+* then check if the token key is given and get the localStorage infos and upadate the user
+* than set the updated user to the localStorage  
+*/
+export const updateUser = (user, next) => {
+  
+  if(typeof window !== "undefined"){
+  
+    if(localStorage.getItem("tokenkey")){
+
+      // get infos from localstorage
+      let auth =  JSON.parse(localStorage.getItem("tokenkey"))   
+      
+      auth.user = user
+      //set to the local storage
+      localStorage.setItem("tokenkey", JSON.stringify(auth))
+      next(); 
+    }
+  }
+}; 

@@ -27,6 +27,11 @@ router.get(
   authController.requireSignin,
   userController.getUser
 );
+//photo
+router.get(
+  "/user/photo/:userId",
+  userController.userPhoto
+);
 
 router.put(
   "/user/:userId",
