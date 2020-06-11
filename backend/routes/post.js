@@ -23,6 +23,11 @@ router.put(
   authController.requireSignin,
   postController.uncomment
 );
+router.put(
+  "/post/updatecomment",
+  authController.requireSignin,
+  postController.updateComment
+);
 
 router.post(
   "/post/new/:userId",
@@ -47,6 +52,8 @@ router.delete(
   postController.isPoster,
   postController.deletePost
 );
+
+router.get("/post/photo/:postId", postController.photo);
 
 router.param("userId", userController.userById); //userById() with be executed in routes that have :userId
 router.param("postId", postController.postById); //postById() with be executed in routes that have :postId

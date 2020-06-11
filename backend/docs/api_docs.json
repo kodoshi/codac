@@ -11,8 +11,12 @@
   "/post/unlike": "PUT method, removes a like from a certain post",
   "/post/comment": "PUT method, adds comment to a post",
   "/post/uncomment": "PUT method, removes comment from a post",
+  "/post/updatecomment": "PUT method, edits a comment",
+  "/post/photo/:postId": "GET method, gets photo from a postId",
   "/users": "GET method, gets all users",
   "/user/:userId": "GET/PUT/DELETE method, gets/updates/deletes user, needs userId",
   "/user/follow": "PUT method, adds follower/followee",
-  "/user/unfollow": "PUT method, removes follower/followee"
+  "/user/unfollow": "PUT method, removes follower/followee",
+  "/user/tofollow/:userId": "GET method, shows who the user can follow, other than himself or the people he is already following",
+  "/user/photo/:userId": "GET method, gets the profile picture of a single user, needs userId"
 }
