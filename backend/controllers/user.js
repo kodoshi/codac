@@ -118,20 +118,6 @@ exports.updateUser = (req, res, next) => {
   });
 };
 
-exports.userPhoto = (req, res, next) => {
-  
-  //check if the user has uploaded a photo on his user profile page
-  if(req.profile.photo.data){
-  //set the content type of the file (image, jpg, png etc..)
-    res.set(("Content-Type", req.profile.photo.contentType))
-    return res.send(req.profile.photo.data);
-
-  }
-  next();
- 
-}
-
-
 
 /**
  * @param {*} req HTTP request from express
