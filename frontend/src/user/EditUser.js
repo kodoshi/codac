@@ -77,7 +77,7 @@ handleChange = name => event => {
   this.setState({error: ""});
     
     //if the name is 'photo' take event.target.files the first []
-    const value = name === 'photo' ? event.target.files[0] :event.target.value
+    const value = name === 'photo' ? event.target.files[0] : event.target.value
     //get the fileSize and save it to the state if the size is not defined get the default value of fileSize
     const fileSize = name === 'photo' ? event.target.files[0].size: 0;
 
@@ -95,13 +95,6 @@ handleChange = name => event => {
 
 editprofile () {
  if (this.validate()) {
-  const { name, email, password } = this.state;
-    const user = {
-        name,
-        email,
-        password: password || "undifined"
-       }
-
     const userId = this.props.match.params.userId;
     const tokenkey = isAuthenticated().token;
     //this.userData --> send the userData to the backend
@@ -120,8 +113,6 @@ editprofile () {
     
  
 };
-
-
 
 render() {
 const userId = this.props.match.params.userId;

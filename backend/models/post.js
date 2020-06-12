@@ -16,9 +16,12 @@ const postSchema = new mongoose.Schema({
   },
 
   photo: {
-    data: Buffer, //image will be seen first in frontend and it will take a bit to be received in the
+    //image will be seen first in frontend and it will take a bit to be received in the
     //backend, so it will be saved in this buffer, will not throw error if not implemented. Buffer=binary data format
-    contentType: String, //will hold the format of the picture uploaded
+    data: Buffer, 
+    
+    //will hold the format of the picture uploaded
+    contentType: String, 
   },
 
   posted_by: {

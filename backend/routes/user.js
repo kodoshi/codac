@@ -53,6 +53,9 @@ router.get(
   userController.findPeople
 ); // who to follow
 
-router.param("userId", userController.userById); //userById() with be executed in routes that have :userId
+
+//userById() with be executed in routes that have :userId
+router.param("userId", userController.userById);
 
 module.exports = router;
+

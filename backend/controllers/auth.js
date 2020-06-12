@@ -62,7 +62,8 @@ exports.signout = (req, res) => {
 /**
  * @param {*} req HTTP request from express
  * @param {*} res HTTP response from express
- * Require Signin method, if json web token is valid, express jwt adds the verified id to the request object
+ * Require Signin method, if json web token is valid, 
+ * express jwt adds the verified id in an auth key to the request object
  */
 exports.requireSignin = express_jwt({
   secret: config.JWT_SECRET,

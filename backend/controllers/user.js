@@ -94,7 +94,9 @@ exports.updateUser = (req, res, next) => {
     }
     let user = req.profile; //defined in userById method above
     // console.log("user in update: ", user);
-    user = _.extend(user, fields); //lodash changes the user object with the added info from the fields
+
+    //lodash changes the user object with the added info from the fields
+    user = _.extend(user, fields);
     user.updated_at = Date.now(); //date of update gets logged to be saved in the DB
     // console.log("USER FORM DATA UPDATE: ", user);
 
@@ -185,6 +187,7 @@ exports.addFollower = (req, res, next) => {
     { new: true }
   )
     .populate("following", "_id name")
+    .populate("followers", "_id name")
     .exec((err, result) => {
       if (err) {
         return res.status(400).json({ error: err });
@@ -231,6 +234,8 @@ exports.removeFollower = (req, res, next) => {
     { new: true }
   )
     .populate("following", "_id name")
+    .populate("followers", "_id name")
+
     .exec((err, result) => {
       if (err) {
         return res.status(400).json({ error: err });

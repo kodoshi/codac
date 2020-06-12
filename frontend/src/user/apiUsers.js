@@ -1,7 +1,8 @@
 /**
-* @param {*} userId id of the user in the url 
-* @param {*} tokenkey token that is saved in localStorage.
+* @param {string} userId id of the user in the url 
+* @param {string} tokenkey token that is saved in localStorage.
 * GetUser information method: make a http request to the server.
+* we send the token to the backend 
 * take the response object from the server
 * and return json response
 */
@@ -22,10 +23,11 @@ export const readuserdata = (userId, tokenkey) => {
 };
 
 /**
-* @param {*} userId id of the user in the url 
-* @param {*} tokenkey token that is saved in localStorage
-* @param {*} user object that is on the State
+* @param {string} userId id of the user in the url 
+* @param {string} tokenkey token that is saved in localStorage
+* @param {string} user object that is on the State
 * Update information method: make a http request to the server.
+* we send the token and user to the backend 
 * take the response object from the server
 * and return json response
 */
@@ -47,9 +49,10 @@ export const update = (userId, tokenkey, user) => {
 };
 
 /**
-* @param {*} userId id of the user in the url 
-* @param {*} tokenkey token that is saved in localStorage
+* @param {string} userId id of the user in the url 
+* @param {string} tokenkey token that is saved in localStorage
 * Delete user Account method: make a http request to the server.
+* we send the token to the backend 
 * take the response object from the server
 * and return json response
 */
@@ -88,7 +91,7 @@ export const listusers= ()=>{
 }
 
 /**
-* @param {*} user object that is saved in the localStorage 
+* @param {string} user object that is saved in the localStorage 
 * @param {*} next allows the method to go to the next middleware
 * updateUser method: update user in the local storage.
 * First check if token exists in the localStorage, so the user is authenticated.
@@ -111,3 +114,60 @@ export const updateUser = (user, next) => {
     }
   }
 }; 
+
+
+
+/**
+* @param {string} userId id of the user in the url 
+* @param {string} tokenkey token that is saved in localStorage
+* @param {string} followId followed user id
+* follow method: make a http request to the server.
+* we send the token , userid and followid to the backend 
+* take the response object from the server
+* and return json response
+*/
+export const follow = (userId, tokenkey, followId) => {
+  
+  return fetch(`${process.env.REACT_APP_API_URL}/user/follow`, {
+    method: "PUT",
+    headers: {
+      Accept: "application/json",
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${tokenkey}`
+      },
+      body: JSON.stringify({userId, followId })
+  })
+  .then(response => {
+    return response.json()
+  }).catch((err) =>{
+        console.log(err)
+    });
+};
+
+
+/**
+* @param {string} userId id of the user in the url 
+* @param {string} tokenkey token that is saved in localStorage
+* @param {string} unfollowId unfollowed user id
+* unfollow method: make a http request to the server.
+* we send the token , userid and unfollowid to the backend 
+* take the response object from the server
+* and return json response
+*/
+export const unfollow = (userId, tokenkey, unfollowId) => {
+  
+  return fetch(`${process.env.REACT_APP_API_URL}/user/unfollow`, {
+    method: "PUT",
+    headers: {
+      Accept: "application/json",
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${tokenkey}`
+      },
+      body: JSON.stringify({userId, unfollowId })
+  })
+  .then(response => {
+    return response.json()
+  }).catch((err) =>{
+        console.log(err)
+    });
+};
