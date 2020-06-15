@@ -34,12 +34,10 @@ exports.hasAuthorization = (req, res, next) => {
   let sameUser = req.profile && req.auth && req.profile._id == req.auth._id;
   let adminUser = req.profile && req.auth && req.auth.role === "admin";
 
-  const authorized = sameUser || adminUser;
-
   // console.log("req.profile ", req.profile, " req.auth ", req.auth);
   // console.log("SAMEUSER", sameUser, "ADMINUSER", adminUser);
 
-  if (!authorized) {
+  if (!(sameUser || adminUser)) {
     return res.status(403).json({
       error: "User is not authorized to perform this action",
     });
@@ -60,7 +58,7 @@ exports.allUsers = (req, res) => {
       });
     }
     res.json(users);
-  }).select("name email created_at updated_at");
+  }).select("name email created_at updated_at role");
 };
 
 /**
@@ -119,7 +117,6 @@ exports.updateUser = (req, res, next) => {
     });
   });
 };
-
 
 /**
  * @param {*} req HTTP request from express
@@ -260,5 +257,5 @@ exports.findPeople = (req, res) => {
       return res.status(400).json({ error: err });
     }
     res.json(users);
-  }).select("name"); //just need to display the name of the person followed/that can be folllowed
+  }).select("name"); //just need to display the name of the person followed/that can be followed
 };

@@ -40,6 +40,7 @@ router.get(
   //authController.requireSignin,  //maybe we dont need auth for this?
   postController.postsByUser
 );
+router.get("/post/:postId", postController.singlePost);
 router.put(
   "/post/:postId",
   authController.requireSignin,

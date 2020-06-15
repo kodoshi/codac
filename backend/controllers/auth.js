@@ -43,7 +43,7 @@ exports.signin = (req, res) => {
     }
 
     const token = jwt.sign({ _id: user._id }, config.JWT_SECRET); //token being generated with user id and JWT secret
-    res.cookie("monedhe", token, { expire: new Date() + 3600000 }); //1 hour remember me cookie
+    res.cookie("monedhe", token, { expire: new Date() + 604800 }); //1 week remember me cookie
     const { _id, name, email } = user;
     return res.json({ token, user: { _id, email, name } }); //sending the user and his token to frontend
   });
@@ -62,7 +62,7 @@ exports.signout = (req, res) => {
 /**
  * @param {*} req HTTP request from express
  * @param {*} res HTTP response from express
- * Require Signin method, if json web token is valid, 
+ * Require Signin method, if json web token is valid,
  * express jwt adds the verified id in an auth key to the request object
  */
 exports.requireSignin = express_jwt({
