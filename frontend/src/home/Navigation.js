@@ -26,6 +26,7 @@ class Navigation extends React.Component {
 			</Link>
 		 
 		</li>
+	
 	{!isAuthenticated() && (
 		<React.Fragment>
 			<li className="nav-item">
@@ -39,12 +40,13 @@ class Navigation extends React.Component {
 
 	{isAuthenticated() && (
 		<React.Fragment>
+				
 		<li className="nav-item">
-			<span
-			className="nav-link text-primary" style={{cursor: "pointer"}}
-			onClick={() => signout(() => this.props.history.push('/'))}> 
-			Signout 
-			</span> 
+			<Link 
+			className="nav-link text-primary" 
+			to={'/findfriends/'}> Find Friends
+			</Link>
+		 
 		</li>
 		<li className="nav-item">
 			<Link 
@@ -52,6 +54,13 @@ class Navigation extends React.Component {
 			to={'/user/' + isAuthenticated().user._id}> {isAuthenticated().user.name} 
 			</Link>
 		 
+		</li>
+		<li className="nav-item">
+			<span
+			className="nav-link text-primary" style={{cursor: "pointer"}}
+			onClick={() => signout(() => this.props.history.push('/'))}> 
+			Signout 
+			</span> 
 		</li>
 		</React.Fragment>
 

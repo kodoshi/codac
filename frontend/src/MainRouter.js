@@ -8,6 +8,7 @@ import UserProfile from './user/UserProfile';
 import User from './user/User'; 
 import EditUser from './user/EditUser';
 import PrivateRoute from './auth/PrivateRoute'; 
+import FindPeople from './user/FindPeople'; 
 
 
 
@@ -20,11 +21,13 @@ render() {
 	<Navigation />
 		<Switch>
 			<Route exact path="/" component={HomePage} />
+			<Route exact path="/users" component={User} />
 			<Route exact path="/signup" component={RegisterUser} />
 			<Route exact path="/signin" component={LoginUser} />
 			<PrivateRoute exact path="/user/edit/:userId" component={EditUser} />
+			<PrivateRoute exact path="/findfriends" component={FindPeople} />
 			<PrivateRoute exact path="/user/:userId" component={UserProfile} />
-			<Route exact path="/users" component={User} />
+			
 		</Switch>
 	</div>
 		)

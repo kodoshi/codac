@@ -92,6 +92,7 @@ exports.updateUser = (req, res, next) => {
         error: "Picture upload failed",
       });
     }
+    //save user
     let user = req.profile; //defined in userById method above
     // console.log("user in update: ", user);
 
@@ -254,11 +255,13 @@ exports.removeFollower = (req, res, next) => {
 exports.findPeople = (req, res) => {
   let following = req.profile.following;
   following.push(req.profile._id); //the user also follows himself
+      //$nin='not in', used to exclude the ppl already being followed
+ 
   User.find({ _id: { $nin: following } }, (err, users) => {
-    //$nin='not in', used to exclude the ppl already being followed
     if (err) {
       return res.status(400).json({ error: err });
     }
     res.json(users);
-  }).select("name"); //just need to display the name of the person followed/that can be folllowed
+    //just need to display the name of the person followed/that can be folllowed not the entire user object
+  }).select("name"); 
 };

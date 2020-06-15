@@ -25,7 +25,7 @@ export const readuserdata = (userId, tokenkey) => {
 /**
 * @param {string} userId id of the user in the url 
 * @param {string} tokenkey token that is saved in localStorage
-* @param {string} user object that is on the State
+* @param {string} user data  that is on the State
 * Update information method: make a http request to the server.
 * we send the token and user to the backend 
 * take the response object from the server
@@ -39,6 +39,7 @@ export const update = (userId, tokenkey, user) => {
       Accept: "application/json",
       Authorization: `Bearer ${tokenkey}`
       },
+      // no need to stringify, we have FormData
       body: user
   })
   .then(response => {
@@ -106,7 +107,7 @@ export const updateUser = (user, next) => {
 
       // get infos from localstorage
       let auth =  JSON.parse(localStorage.getItem("tokenkey"))   
-      
+      //update the user property of tokenkey
       auth.user = user
       //set to the local storage
       localStorage.setItem("tokenkey", JSON.stringify(auth))
@@ -164,6 +165,33 @@ export const unfollow = (userId, tokenkey, unfollowId) => {
       Authorization: `Bearer ${tokenkey}`
       },
       body: JSON.stringify({userId, unfollowId })
+  })
+  .then(response => {
+    return response.json()
+  }).catch((err) =>{
+        console.log(err)
+    });
+};
+
+
+/**
+* @param {string} userId id of the user in the url 
+* @param {string} tokenkey token that is saved in localStorage
+* findpeople method: make a http request to the server.
+* we send the token , userid to the backend 
+* take the response object from the server
+* and return json response
+*/
+
+export const findPeople = (userId, tokenkey) => {
+  
+  return fetch(`${process.env.REACT_APP_API_URL}/user/tofollow/${userId}`, {
+    method: "GET",
+    headers: {
+      Accept: "application/json",
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${tokenkey}`
+      }      
   })
   .then(response => {
     return response.json()

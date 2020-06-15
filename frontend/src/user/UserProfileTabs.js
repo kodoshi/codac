@@ -1,6 +1,5 @@
 import React from "react";
 import { withRouter, Link } from "react-router-dom";
-import { follow, unfollow } from './apiUsers.js';
 import profileimg from '../profileimg/icon.jpg';
 
 
@@ -8,10 +7,8 @@ import profileimg from '../profileimg/icon.jpg';
 
 class UserProfileTabs extends React.Component {
 
-
-
 render() {
-	const {followers} = this.props
+	
 	return (
 	   <div>
 	   	<div className="row">

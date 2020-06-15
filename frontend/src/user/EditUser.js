@@ -115,9 +115,9 @@ editprofile () {
 };
 
 render() {
-const userId = this.props.match.params.userId;
+
 //show the image on the edit user profile after upload, if no image show the default imgage
-const photoUrl = this.state.id ? `${process.env.REACT_APP_API_URL}/user/photo/${userId}?${new Date().getTime()}` : profileimg
+const photoUrl = this.state.id ? `${process.env.REACT_APP_API_URL}/user/photo/${this.state.id}?${new Date().getTime()}` : profileimg;
     return (
 <div className="edit">
       <div className="container cont">

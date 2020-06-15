@@ -1,4 +1,4 @@
-import React from "react";
+  import React from "react";
 import { isAuthenticated } from "../auth/file.js";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faUser } from "@fortawesome/fontawesome-free-solid";
@@ -97,9 +97,9 @@ componentWillReceiveProps(props) {
 
 
 render() {
-  const userId = this.props.match.params.userId;
+  
 //show the image on the edit user profile after upload, if no image show the default imgage
-const photoUrl = this.state.user._id ? `${process.env.REACT_APP_API_URL}/user/photo/${userId}?${new Date().getTime()}` : profileimg
+const photoUrl = this.state.user._id ? `${process.env.REACT_APP_API_URL}/user/photo/${this.state.user._id}?${new Date().getTime()}` : profileimg
 
 	return (
     <div className="welcome">
