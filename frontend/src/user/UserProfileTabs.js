@@ -33,7 +33,6 @@ render() {
       						</Link>
 			    		</div>
 			    	
-			    	
 		    	</div>
 		    )}
 		   </div>
@@ -48,6 +47,7 @@ render() {
 			    				<img
 			    				className="float-left mr-2"
 			    				height="30px"
+			    				
        							src={`${process.env.REACT_APP_API_URL}/user/photo/${user._id}`} 
      							alt={user.name}
       							onError = {index => (index.target.src = `${profileimg}`)}

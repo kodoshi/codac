@@ -113,14 +113,30 @@ const photoUrl = this.state.user._id ? `${process.env.REACT_APP_API_URL}/user/ph
       <img src={photoUrl} alt={this.state.name} style={{width: '20%'}}  onError = {index => (index.target.src = `${profileimg}`)}/>
       <p><b> Username:</b> {this.state.user.name} </p> 
       <p><b> Email:</b> {this.state.user.email} </p>
-      <p> <i>{`Account created at ${new Date(this.state.user.created_at).toDateString()}`}</i></p> 
-    <hr/>
+      <p><b> About me:</b> {this.state.user.about} </p>
+      <hr/>
+      <p className="text-success"> <i>{`Account created at:  ${new Date(this.state.user.created_at).toDateString()}`}</i></p> 
+      
+     
+      <hr/>
   </div>
+ 
 </div>
 
       {isAuthenticated().user && isAuthenticated().user._id === this.state.user._id ? 
         (
         <>
+         <div className="row">
+  <div className="col md-12 ">
+    <hr/>
+     
+      <p className="text-warning"> <i>{`Account updated at: ${new Date(this.state.user.updated_at).toDateString()}`}</i></p> 
+      <hr/>
+   
+  </div>
+ 
+</div>
+
           <div className="d-inline-block">
             <Link className="btn btn-raised btn-success mr-5" to={`/user/edit/${this.state.user._id}`}>
             Edit Profile
@@ -128,18 +144,14 @@ const photoUrl = this.state.user._id ? `${process.env.REACT_APP_API_URL}/user/ph
           </div>
           <div className="d-inline-block">
             <DeleteUser userId={this.state.user._id} />
+
           </div>
+           <hr/>
         </>
         ) : 
         <FollowUnfollowUser following={this.state.following} onButtonClick={this.clickFollow} />
       }
-    <div className="row">
-      <div className="col">
-        <hr/>
-          <p><b> About me:</b> {this.state.user.about} </p>
-        <hr/>
-      </div>
-    </div>
+     <hr/>
     <UserProfileTabs followers={this.state.user.followers} following={this.state.user.following}/>
 
   </div>
