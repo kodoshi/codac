@@ -251,18 +251,13 @@ exports.removeFollower = (req, res, next) => {
  */
 exports.findPeople = (req, res) => {
   let following = req.profile.following;
-  following.push(req.profile._id); //the user also follows himself
-      //$nin='not in', used to exclude the ppl already being followed
- 
+  following.push(req.profile._id);
+  //$nin='not in', used to exclude the ppl already being followed
+
   User.find({ _id: { $nin: following } }, (err, users) => {
     if (err) {
       return res.status(400).json({ error: err });
     }
     res.json(users);
-<<<<<<< HEAD
-    //just need to display the name of the person followed/that can be folllowed not the entire user object
-  }).select("name"); 
-=======
   }).select("name"); //just need to display the name of the person followed/that can be followed
->>>>>>> 034fad53590f62b25ff0e3f6b6a94db13ba45bd9
 };
