@@ -27,21 +27,18 @@ router.get(
   authController.requireSignin,
   userController.getUser
 );
-//photo
-router.get(
-  "/user/photo/:userId",
-  userController.userPhoto
-);
 
 router.put(
   "/user/:userId",
   authController.requireSignin,
+  userController.hasAuthorization,
   userController.updateUser
 );
 
 router.delete(
   "/user/:userId",
   authController.requireSignin,
+  userController.hasAuthorization,
   userController.deleteUser
 );
 
@@ -53,9 +50,7 @@ router.get(
   userController.findPeople
 ); // who to follow
 
-
 //userById() with be executed in routes that have :userId
 router.param("userId", userController.userById);
 
 module.exports = router;
-

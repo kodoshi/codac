@@ -50,10 +50,16 @@ const userSchema = new mongoose.Schema({
   following: [{ type: mongoose.Schema.ObjectId, ref: "User" }],
 
   followers: [{ type: mongoose.Schema.ObjectId, ref: "User" }],
+
+  role: {
+    type: String,
+    default: "subscriber",
+  },
 });
 
 /**
- * Virtual fields that don't get persisted in the DB
+ * Virtual fields are additional fields that don't get persisted in the DB,
+ * they only exist logically and have a pre-defined capabilities
  */
 
 userSchema

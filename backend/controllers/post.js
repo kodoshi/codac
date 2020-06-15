@@ -1,4 +1,4 @@
- const Post = require("../models/post");
+const Post = require("../models/post");
 const formidable = require("formidable");
 const fs = require("fs");
 const _ = require("lodash");
@@ -13,8 +13,9 @@ const _ = require("lodash");
 exports.postById = (req, res, next, id) => {
   Post.findById(id)
     .populate("posted_by", "_id name") //needed to communicate with User model, that holds (user) _id and name
-    .populate("comments", "text created_at")
     .populate("comments.posted_by", "_id name")
+    .populate("posted_by", "_id name role")
+    .select("_id title body created_at likes comments photo")
     .exec((err, post) => {
       if (err || !post) {
         return res.status(400).json({ error: err });
@@ -102,12 +103,13 @@ exports.postsByUser = (req, res) => {
  * Is Poster method, checks if req.post and req.auth exist and that the ID of the User that posted that specific post matches with the User ID currently authorized
  */
 exports.isPoster = (req, res, next) => {
-  let is_valid_poster =
-    req.post && req.auth && req.post.posted_by._id == req.auth._id;
-  if (!is_valid_poster) {
+  let sameUser = req.post && req.auth && req.post.posted_by._id == req.auth._id;
+  let adminUser = req.post && req.auth && req.auth.role === "admin";
+
+  if (!(sameUser || adminUser)) {
     return res.status(403).json({ error: "User is not authorized" });
   }
-  next(); // going to the next middleware
+  next();
 };
 
 /**
@@ -118,14 +120,29 @@ exports.isPoster = (req, res, next) => {
  * date of update gets persisted in the DB and updated post is returned in the response
  */
 exports.updatePost = (req, res, next) => {
-  let post = req.post;
-  post = _.extend(post, req.body); //lodash changes the post object with the added info from the request body
-  post.updated_at = Date.now(); //date of update gets logged to be saved in the DB below
-  post.save((err) => {
+  let form = new formidable.IncomingForm();
+  form.keepExtensions = true;
+  form.parse(req, (err, fields, files) => {
     if (err) {
-      return res.status(400).json({ error: err });
+      return res.status(400).json({ error: "Picture upload failed" });
     }
-    res.json(post);
+
+    // save post
+    let post = req.post;
+    post = _.extend(post, fields); //lodash changes the post object with the added info from the request body
+    post.updated_at = Date.now(); //date of update gets logged to be saved in the DB below
+
+    if (files.photo) {
+      post.photo.data = fs.readFileSync(files.photo.path);
+      post.photo.contentType = files.photo.type;
+    }
+
+    post.save((err) => {
+      if (err) {
+        return res.status(400).json({ error: err });
+      }
+      res.json(post);
+    });
   });
 };
 
