@@ -42,10 +42,13 @@ exports.signin = (req, res) => {
       });
     }
 
-    const token = jwt.sign({ _id: user._id }, config.JWT_SECRET); //token being generated with user id and JWT secret
+    const token = jwt.sign(
+      { _id: user._id, role: user.role },
+      config.JWT_SECRET
+    ); //token being generated with user id and JWT secret
     res.cookie("monedhe", token, { expire: new Date() + 604800 }); //1 week remember me cookie
-    const { _id, name, email } = user;
-    return res.json({ token, user: { _id, email, name } }); //sending the user and his token to frontend
+    const { _id, name, email, role } = user;
+    return res.json({ token, user: { _id, email, name, role } }); //sending the user and his token to frontend
   });
 };
 
