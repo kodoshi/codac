@@ -42,13 +42,13 @@ render() {
 
 
 
-<h2 className="control-group  cont2 text-center  font1"><FontAwesomeIcon icon={faUsers} /> See All Users  </h2>
-  <div className="text-center cont2">
+<h2 className="cont2 text-center  font1"><FontAwesomeIcon icon={faUsers} /> See All Users  </h2>
+  <div className="cont2 row">
 
   {
     //loop on all users  
     this.state.users.map((user, index) => 
-    <div className="jumbotron bg-light text-dark " key={index}>
+    <div className="cont4  text-dark col-md-4 " key={index}>
       <img 
       className= "card-img-top" 
       src={`${process.env.REACT_APP_API_URL}/user/photo/${user._id}`} 
@@ -57,8 +57,8 @@ render() {
       onError = {index => (index.target.src = `${profileimg}`)}
       />
       
-      <h2 className="text-dark"><b><i>{user.name}</i></b> </h2>
-      <p><i>{user.email}</i></p>  <Link to={`/user/${user._id}`} className="btn text-light bg-dark"> View Profile </Link>
+      <h4 className="text-dark"><b><i>{user.name}</i></b> </h4>
+      <p><i>{user.email}</i></p>  <Link to={`/user/${user._id}`} className="btn text-light bg-primary"> View Profile </Link>
 
 
     </div> 

@@ -8,7 +8,7 @@ const validator = require("../validation/helper");
 /**
  * routes getting 'filtered' through middlewares
  */
-router.get("/posts", postController.getPost);
+router.get("/posts", postController.getPosts);
 
 router.put("/post/like", authController.requireSignin, postController.like);
 router.put("/post/unlike", authController.requireSignin, postController.unlike);

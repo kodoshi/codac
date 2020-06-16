@@ -1,0 +1,177 @@
+import React from "react";
+import { isAuthenticated } from "../auth/file.js";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faPlusCircle } from "@fortawesome/fontawesome-free-solid";
+import profileimg from '../profileimg/icon.jpg';
+import { withRouter } from "react-router";
+import { create} from './apiPost.js';
+
+
+class CreatePost extends React.Component {
+
+constructor(props) {
+    super(props);
+
+    this.state = {
+      title: "",
+      body: "",
+      photo: "",
+      user: {}, 
+      error: "",
+      fileSize: 0
+      
+    };
+  }
+
+  
+
+/**
+* When the page will be loaded and we are on the Edit profile page all the user data will be read and set to the state
+* if there is an error we will be redirect to the user profile
+*/
+
+componentDidMount() {
+  //user Form Data Browser API
+this.postData = new FormData()
+this.setState({user: isAuthenticated().user});
+  
+}
+
+/**
+* Validation of the edit profile page
+* validate name, email and password
+*/
+
+validate (){
+    const { title, body, fileSize} = this.state;
+    if (fileSize > 10000) {
+      this.setState({error: "Filesize should be less than 100kb "})
+      return false;
+    }
+    if (title.length === 0 || body.length === 0) {
+      this.setState({error: "All fields are required"})
+      return false;
+    }   
+    return true;
+}
+
+handleChange = name => event => {
+  this.setState({error: ""});
+    
+    //if the name is 'photo' take event.target.files the first []
+    const value = name === 'photo' ? event.target.files[0] : event.target.value
+    //get the fileSize and save it to the state if the size is not defined get the default value of fileSize
+    const fileSize = name === 'photo' ? event.target.files[0].size: 0;
+
+    //save the values on the userData 
+    this.postData.set(name, value)
+
+    this.setState({[name]: value, fileSize});
+  }
+
+/**
+* validate name, email and password if they are correct go ti next step (u can use the current password || new one)
+* handle server response from update method and if there is an error set it to the state
+* if there is no error do the update and redirect to user profile page
+*/
+
+createpost () {
+ if (this.validate()) {
+ 	//take the user id from the local storage
+    const userId = isAuthenticated().user._id;
+    const tokenkey = isAuthenticated().token;
+    //this.userData --> send the userData to the backend
+    create(userId, tokenkey, this.postData)
+    .then(data => {
+     if (data.error) 
+      this.setState({error: data.error})
+     else 
+     //console.log("New Post:", data)
+       this.props.history.push(`../user/${this.state.user._id}`)
+
+      })
+   
+ }
+    
+ 
+};
+
+render() {
+
+//show the image on the edit user profile after upload, if no image show the default imgage
+const photoUrl = this.state.id ? `${process.env.REACT_APP_API_URL}/user/photo/${this.state.id}?${new Date().getTime()}` : profileimg;
+    return (
+<div className="edit">
+      <div className="container cont">
+        <h2 className="mt-5 mb-5 text-center font1">
+          <FontAwesomeIcon icon={faPlusCircle} /> Add new Post
+        </h2>
+        <img 
+        src={photoUrl} 
+        alt={this.state.name}
+        
+        className="card-img-top"
+        style={{width: '20%'}}
+        onError = {index => (index.target.src = `${profileimg}`)}
+
+        />
+        
+         <div 
+         className="alert alert-danger"
+         style={{display: this.state.error ? "": "none"}}>
+         {this.state.error}
+         </div>
+          <div className="form-group">
+          <label className="text-light font">Profile Photo: </label>
+          <input
+            type="file"
+            onChange={this.handleChange("photo")}
+            accept="image/*"
+            className="form-control bg-light"
+            
+          />
+        </div>
+
+        <div className="form-group">
+          <label className="text-light font">Title: </label>
+          <input
+            type="text"
+            onChange={this.handleChange("title")}
+            value={this.state.title}
+            className="form-control bg-light"
+            name="name"
+            required
+          />
+        </div>
+        <div className="form-group">
+          <label className="text-light font">Body me: </label>
+          <textarea
+            type="text"
+            onChange={this.handleChange("body")}
+            value={this.state.body}
+            className="form-control bg-light"
+            name="about"
+            maxLength="300"
+            required
+          />
+        </div>
+        
+        <button
+          className="btn btn-raised btn-primary"
+          onClick={() => this.createpost()}
+        >
+          Add new Post
+        </button>
+      </div>
+
+     </div>
+
+
+
+    );
+  }
+
+  
+}
+
+export default withRouter(CreatePost);

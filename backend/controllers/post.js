@@ -30,15 +30,15 @@ exports.postById = (req, res, next, id) => {
  * @param {*} res HTTP response from express
  * Get Post function currently, queries and selections to/from db are made here with standart MongoDB methods, json response is being returned
  */
-exports.getPost = (req, res) => {
+exports.getPosts = (req, res) => {
   const posts = Post.find()
     .populate("posted_by", "_id name") //lets you reference documents in other collections, in out case the User model
     .populate("comments", "text created_at")
     .populate("comments.posted_by", "_id name")
     .select("_id title body created_at likes")
     .sort({ created: -1 })
-    .then((post) => {
-      res.json({ post }); //default 200 http code
+    .then((posts) => {
+      res.json(posts); //default 200 http code
     })
     .catch((err) => console.log(err));
 };

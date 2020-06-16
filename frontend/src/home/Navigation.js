@@ -51,6 +51,13 @@ class Navigation extends React.Component {
 		<li className="nav-item">
 			<Link 
 			className="nav-link text-primary" 
+			to={'/add/post'}> Add new Post
+			</Link>
+		 
+		</li>
+		<li className="nav-item">
+			<Link 
+			className="nav-link text-primary" 
 			to={'/user/' + isAuthenticated().user._id}> {isAuthenticated().user.name} 
 			</Link>
 		 

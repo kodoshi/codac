@@ -108,12 +108,12 @@ const photoUrl = this.state.user._id ? `${process.env.REACT_APP_API_URL}/user/ph
  <div className="cont2 text-center">
           
  <div className="row">
-  <div className="col md-12 ">
+  <div className="col md-12 font">
     <hr/>
       <img src={photoUrl} alt={this.state.name} style={{width: '20%'}}  onError = {index => (index.target.src = `${profileimg}`)}/>
-      <p><b> Username:</b> {this.state.user.name} </p> 
-      <p><b> Email:</b> {this.state.user.email} </p>
-      <p><b> About me:</b> {this.state.user.about} </p>
+      <p><b><u> Username:</u></b> {this.state.user.name} </p> 
+      <p><b><u> Email:</u></b> {this.state.user.email} </p>
+      <p><b><u> About me:</u></b> {this.state.user.about} </p>
       <hr/>
       <p className="text-success"> <i>{`Account created at:  ${new Date(this.state.user.created_at).toDateString()}`}</i></p> 
       
@@ -130,7 +130,7 @@ const photoUrl = this.state.user._id ? `${process.env.REACT_APP_API_URL}/user/ph
   <div className="col md-12 ">
     <hr/>
      
-      <p className="text-warning"> <i>{`Account updated at: ${new Date(this.state.user.updated_at).toDateString()}`}</i></p> 
+      <p className=" font text-warning"> <i>{`Account updated at: ${new Date(this.state.user.updated_at).toDateString()}`}</i></p> 
       <hr/>
    
   </div>
