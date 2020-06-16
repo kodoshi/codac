@@ -4,7 +4,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faUsers } from "@fortawesome/fontawesome-free-solid";
 import { Link } from 'react-router-dom';
 import { listusers } from './apiUsers.js';
-import profileimg from '../profileimg/icon.jpg';
+import profileimg from '../images/icon.jpg';
 
 
 class User extends React.Component {
@@ -47,14 +47,14 @@ render() {
 
   {
     //loop on all users  
-    this.state.users.map((user, index) => 
-    <div className="cont4  text-dark col-md-4 " key={index}>
+    this.state.users.map((user, i) => 
+    <div className="cont4  text-dark col-md-4 " key={i}>
       <img 
-      className= "card-img-top" 
+      className= "card-img-top mb-4" 
       src={`${process.env.REACT_APP_API_URL}/user/photo/${user._id}`} 
       alt={user.name}
       style={{width: '20%'}}
-      onError = {index => (index.target.src = `${profileimg}`)}
+      onError = {i => (i.target.src = `${profileimg}`)}
       />
       
       <h4 className="text-dark"><b><i>{user.name}</i></b> </h4>

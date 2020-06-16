@@ -2,7 +2,7 @@ import React from "react";
 import { isAuthenticated } from "../auth/file.js";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faEdit } from "@fortawesome/fontawesome-free-solid";
-import profileimg from '../profileimg/icon.jpg';
+import profileimg from '../images/icon.jpg';
 import { withRouter } from "react-router";
 import { update, readuserdata, updateUser} from './apiUsers.js';
 

@@ -7,9 +7,11 @@ import Navigation from './home/Navigation';
 import UserProfile from './user/UserProfile';
 import User from './user/User'; 
 import EditUser from './user/EditUser';
-import PrivateRoute from './auth/PrivateRoute'; 
 import FindPeople from './user/FindPeople'; 
 import CreatePost from './post/CreatePost'; 
+import SinglePost from './post/SinglePost'; 
+import PrivateRoute from './auth/PrivateRoute'; 
+
 
 
 
@@ -22,6 +24,7 @@ render() {
 	<Navigation />
 		<Switch>
 			<Route exact path="/" component={HomePage} />
+			<Route exact path="/post/:postId" component={SinglePost} />
 			<Route exact path="/users" component={User} />
 			<Route exact path="/signup" component={RegisterUser} />
 			<Route exact path="/signin" component={LoginUser} />

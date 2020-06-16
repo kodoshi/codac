@@ -2,9 +2,9 @@ import React from "react";
 import { isAuthenticated } from "../auth/file.js";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faPlusCircle } from "@fortawesome/fontawesome-free-solid";
-import profileimg from '../profileimg/icon.jpg';
+import defaultpost from '../images/post.jpg';
 import { withRouter } from "react-router";
-import { create} from './apiPost.js';
+import { create } from './apiPost.js';
 
 
 class CreatePost extends React.Component {
@@ -26,20 +26,20 @@ constructor(props) {
   
 
 /**
-* When the page will be loaded and we are on the Edit profile page all the user data will be read and set to the state
-* if there is an error we will be redirect to the user profile
+* On the Component Mount we will save FormData on the postData variable
+* and set authenticated user to the state
 */
 
 componentDidMount() {
-  //user Form Data Browser API
+  //post Form Data Browser API
 this.postData = new FormData()
 this.setState({user: isAuthenticated().user});
   
 }
 
 /**
-* Validation of the edit profile page
-* validate name, email and password
+* Validation of the create post page
+* validate photo, title, content(body)
 */
 
 validate (){
@@ -63,24 +63,24 @@ handleChange = name => event => {
     //get the fileSize and save it to the state if the size is not defined get the default value of fileSize
     const fileSize = name === 'photo' ? event.target.files[0].size: 0;
 
-    //save the values on the userData 
+    //save the values on the postData 
     this.postData.set(name, value)
 
     this.setState({[name]: value, fileSize});
   }
 
 /**
-* validate name, email and password if they are correct go ti next step (u can use the current password || new one)
-* handle server response from update method and if there is an error set it to the state
+* validate title, body and photo if they are correct go ti next step 
+* handle server response from create method and if there is an error set it to the state
 * if there is no error do the update and redirect to user profile page
 */
 
 createpost () {
  if (this.validate()) {
- 	//take the user id from the local storage
+ 	//take the user id and token from the local storage
     const userId = isAuthenticated().user._id;
     const tokenkey = isAuthenticated().token;
-    //this.userData --> send the userData to the backend
+    //this.postData --> send the postData to the backend
     create(userId, tokenkey, this.postData)
     .then(data => {
      if (data.error) 
@@ -98,8 +98,7 @@ createpost () {
 
 render() {
 
-//show the image on the edit user profile after upload, if no image show the default imgage
-const photoUrl = this.state.id ? `${process.env.REACT_APP_API_URL}/user/photo/${this.state.id}?${new Date().getTime()}` : profileimg;
+const photoUrl = this.state.id ? `${process.env.REACT_APP_API_URL}/user/photo/${this.state.id}?${new Date().getTime()}` : defaultpost;
     return (
 <div className="edit">
       <div className="container cont">
@@ -112,7 +111,7 @@ const photoUrl = this.state.id ? `${process.env.REACT_APP_API_URL}/user/photo/${
         
         className="card-img-top"
         style={{width: '20%'}}
-        onError = {index => (index.target.src = `${profileimg}`)}
+        onError = {index => (index.target.src = `${defaultpost}`)}
 
         />
         

@@ -5,7 +5,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faSearch } from "@fortawesome/fontawesome-free-solid";
 import { Link } from 'react-router-dom';
 import { findPeople } from './apiUsers.js';
-import profileimg from '../profileimg/icon.jpg';
+import profileimg from '../images/icon.jpg';
 
 
 class FindPeople extends React.Component {
@@ -55,7 +55,7 @@ render() {
     this.state.users.map((user, index) => 
     <div className="cont4 col-md-4 text-dark " key={index}>
       <img 
-      className= "card-img-top" 
+      className= "card-img-top mb-4" 
       src={`${process.env.REACT_APP_API_URL}/user/photo/${user._id}`} 
       alt={user.name}
       style={{width: '20%'}}

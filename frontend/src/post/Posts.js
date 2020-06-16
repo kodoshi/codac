@@ -4,7 +4,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faList } from "@fortawesome/fontawesome-free-solid";
 import { Link } from 'react-router-dom';
 import { listposts } from './apiPost.js';
-import profileimg from '../profileimg/icon.jpg';
+import defaultpost from '../images/post.jpg';
 
 
 class Posts extends React.Component {
@@ -47,15 +47,32 @@ render() {
 
   {
     //loop on all posts  
-    this.state.posts.map((post, index) => 
-    <div className="cont4  text-dark col-md-4 " key={index}>
+    this.state.posts.map((post, i) => {
+      const postId = post.posted_by ? post.posted_by._id : ""
+      const postName = post.posted_by ? post.posted_by.name : " Unknown"
+
+    return <div className="cont4  text-dark col-md-4 " key={i}>
           <div className="card-body">
+            <img 
+        src={`${process.env.REACT_APP_API_URL}/post/photo/${post._id}?${new Date().getTime()}`} 
+        alt={post.title}
+        
+        className="img-thumbnail mb-3"
+        style={{width: 'auto', height: "200px"}}
+        onError = {i => (i.target.src = `${defaultpost}`)}
+
+        />
             <h4 className="card-title text-dark"><b><i>{post.title}</i></b> </h4>
-            <p className="card-text"><i>{post.body}</i></p>  <Link to={`/posts/${post._id}`} className="btn text-light bg-primary"> Read more </Link>
+            <p className="card-text"><i>{post.body}</i></p>  
+            <br />
+            <p className="mark"> Posted by <Link to={`/user/${postId}`}> {postName} </Link> on {new Date(post.created_at).toDateString() }
+              </p>
+            
+            <Link to={`/post/${post._id}`} className="btn text-light bg-primary"> Read more </Link>
+            
           </div> 
     </div> 
-    )
-  }
+     })}
 
 </div>
 </div>

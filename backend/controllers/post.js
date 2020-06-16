@@ -36,7 +36,7 @@ exports.getPosts = (req, res) => {
     .populate("comments", "text created_at")
     .populate("comments.posted_by", "_id name")
     .select("_id title body created_at likes")
-    .sort({ created: -1 })
+    .sort({ created_at: -1 })
     .then((posts) => {
       res.json(posts); //default 200 http code
     })
