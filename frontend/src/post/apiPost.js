@@ -1,6 +1,6 @@
 
 /**
-* @param {string} userId id of the user in the url 
+* @param {string} userId id of the user 
 * @param {string} tokenkey token that is saved in localStorage
 * @param {string} post, we need to add new post
 * create method: make a http request to the server.
@@ -87,3 +87,57 @@ export const listbyuser= (userId, tokenkey)=>{
         console.log(err)
     });
 }
+
+
+/**
+* @param {string} postId id of the user in the url 
+* @param {string} tokenkey token that is saved in localStorage
+* Delete user Account method: make a http request to the server.
+* we send the token to the backend 
+* take the response object from the server
+* and return json response
+*/
+export const remove = (postId, tokenkey) => {
+  return fetch(`${process.env.REACT_APP_API_URL}/post/${postId}`, {
+    method: "DELETE",
+    headers: {
+      Accept: "application/json",
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${tokenkey}`
+      }
+  })
+  .then(response => {
+    return response.json()
+  }).catch((err) =>{
+        console.log(err)
+    });
+}
+
+/**
+* @param {string} postId id of the post in the url 
+* @param {string} tokenkey token that is saved in localStorage
+* @param {string} post data  that is on the State
+* Update information method: make a http request to the server.
+* we send the token and post to the backend 
+* take the response object from the server
+* and return json response
+*/
+export const update = (postId, tokenkey, post) => {
+  
+  return fetch(`${process.env.REACT_APP_API_URL}/post/${postId}`, {
+    method: "PUT",
+    headers: {
+      Accept: "application/json",
+      //no need for Content Type, because this is going to be FormData
+      Authorization: `Bearer ${tokenkey}`
+      },
+      // no need to stringify, we have FormData
+      body: post
+  })
+  .then(response => {
+    return response.json()
+  }).catch((err) =>{
+        console.log(err)
+    });
+};
+

@@ -17,8 +17,8 @@ constructor(props) {
   }
 
 /**
- * Handle the response object from listusers method
- * if no error set State with data and display user information in the right form
+ * Handle the response object from listpost method
+ * if no error set State with data and display post information in the right form
  * if error console log the err.
 */
 
@@ -63,7 +63,7 @@ render() {
 
         />
             <h4 className="card-title text-dark"><b><i>{post.title}</i></b> </h4>
-            <p className="card-text"><i>{post.body}</i></p>  
+            <p className="card-text"><i>{post.body.slice(0, 50)}</i></p>  
             <br />
             <p className="mark"> Posted by <Link to={`/user/${postId}`}> {postName} </Link> on {new Date(post.created_at).toDateString() }
               </p>

@@ -3,8 +3,10 @@ import { withRouter } from "react-router";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faList } from "@fortawesome/fontawesome-free-solid";
 import { Link } from 'react-router-dom';
-import { singlepost } from './apiPost.js';
+import { singlepost, remove } from './apiPost.js';
 import defaultpost from '../images/post.jpg';
+import { isAuthenticated } from "../auth/file.js";
+
 
 
 class SinglePost extends React.Component {
@@ -16,9 +18,9 @@ constructor(props) {
     }
   }
 
-  /**
- * Handle the response object from listusers method
- * if no error set State with data and display user information in the right form
+/**
+ * Handle the response object from singlepost method
+ * if no error set State with data and display post information in the right form
  * if error console log the err.
 */
 
@@ -32,6 +34,40 @@ componentDidMount() {
       this.setState({post: data});
   });
   
+}
+
+
+/**
+ * Handle the response object from remove method
+ * if no error delete post and redirect to homepage
+ * if error console log the err.
+*/
+
+deletepost() {
+    const postId = this.props.match.params.postId
+    const tokenkey = isAuthenticated().token
+    remove(postId, tokenkey).then(data => {
+      if (data.error) {
+      console.log(data.error)
+    }
+    else 
+      this.props.history.push("/");
+  });
+
+}
+
+/**
+ * On delete button click, the confirmation screen will be displayed
+ * when we click cancel the account will not be deleted
+ * when we click Ok the account deleteaccount method will be called
+ 
+*/
+
+deleteConfirmation() {
+  const answer = window.confirm("Are you sure you want to delete this post?")
+  if (answer) {
+    this.deletepost()
+  }
 }
 
 
@@ -60,6 +96,24 @@ render() {
             <br/>
             <p className="mark text-dark"> Posted by <Link to={`/user/${postId}`}> {postName} </Link> on {new Date(this.state.post.created_at).toDateString() }
             </p>
+            <div className="d-inline-block">
+              <Link className="btn btn-raised btn-primary mr-5" to={`/`}>
+              Back to Posts 
+              </Link>
+{/* if we have the authenticated user, and if uathenticated userid matches with the posted_by._id */ }      
+        {isAuthenticated().user && isAuthenticated().user._id === postId && (
+                <>
+                  <Link className="btn btn-raised btn-success mr-5" to={`/post/edit/${this.state.post._id}`}>
+                    Edit Post
+                  </Link>
+                  <button onClick={() =>this.deleteConfirmation()} className="btn btn-raised btn-danger mr-5" to={`/`}>
+                    Delete Post 
+                  </button>
+                </>
+                )}
+              
+          </div>
+          
           
         </div> 
 </div>

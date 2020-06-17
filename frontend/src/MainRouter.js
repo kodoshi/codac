@@ -10,6 +10,8 @@ import EditUser from './user/EditUser';
 import FindPeople from './user/FindPeople'; 
 import CreatePost from './post/CreatePost'; 
 import SinglePost from './post/SinglePost'; 
+import EditPost from './post/EditPost';
+
 import PrivateRoute from './auth/PrivateRoute'; 
 
 
@@ -25,6 +27,8 @@ render() {
 		<Switch>
 			<Route exact path="/" component={HomePage} />
 			<Route exact path="/post/:postId" component={SinglePost} />
+			<PrivateRoute exact path="/post/edit/:postId" component={EditPost} />
+
 			<Route exact path="/users" component={User} />
 			<Route exact path="/signup" component={RegisterUser} />
 			<Route exact path="/signin" component={LoginUser} />

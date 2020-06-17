@@ -1,44 +1,47 @@
 import React from "react";
-import { isAuthenticated } from "../auth/file.js";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faPlusCircle } from "@fortawesome/fontawesome-free-solid";
-import defaultpost from '../images/post.jpg';
 import { withRouter } from "react-router";
-import { create } from './apiPost.js';
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faEdit } from "@fortawesome/fontawesome-free-solid";
+import { singlepost, update } from './apiPost.js';
+import defaultpost from '../images/post.jpg';
+import { isAuthenticated } from "../auth/file.js";
 
 
-class CreatePost extends React.Component {
+
+class EditPost extends React.Component {
 
 constructor(props) {
     super(props);
 
     this.state = {
-      title: "",
-      body: "",
-      photo: "",
-      user: {}, 
-      error: "",
-      fileSize: 0
-      
-    };
+     	id: "",
+     	title: "",
+     	body: "",
+     	error: "",
+     	fileSize: 0
+    }
   }
 
-  
-/**
-* On the Component Mount we will save FormData on the postData variable
-* and set authenticated user to the state
-*/
-
 componentDidMount() {
-  //post Form Data Browser API
-this.postData = new FormData()
-this.setState({user: isAuthenticated().user});
-  
+  	  //post Form Data Browser API
+  	this.postData = new FormData()
+	const postId = this.props.match.params.postId
+  	singlepost(postId).then(data => {
+	    if (data.error) {
+	            this.props.history.push(`/user/${isAuthenticated().user._id}`)
+		}
+	    else 
+	      this.setState({
+	      	id: data._id, 
+	      	title: data.title, 
+	      	body: data.body, 
+	      	error: ""});
+  	});
 }
 
 /**
-* Validation of the create post page
-* validate photo, title, content(body)
+* Validation of the edit profile page
+* validate title, body and photo
 */
 
 validate (){
@@ -69,27 +72,24 @@ handleChange = name => event => {
   }
 
 /**
-* validate title, body and photo if they are correct go ti next step 
-* handle server response from create method and if there is an error set it to the state
+* validate title, body and photo if they are correct go ti next step
+* handle server response from update method and if there is an error set it to the state
 * if there is no error do the update and redirect to user profile page
 */
 
-createpost () {
+editpost () {
  if (this.validate()) {
- 	//take the user id and token from the local storage
-    const userId = isAuthenticated().user._id;
+    const postId = this.state.id;
     const tokenkey = isAuthenticated().token;
-    //this.postData --> send the postData to the backend
-    create(userId, tokenkey, this.postData)
+    //this.userData --> send the userData to the backend
+    update(postId, tokenkey, this.postData)
     .then(data => {
      if (data.error) 
       this.setState({error: data.error})
      else 
-     //console.log("New Post:", data)
-       this.props.history.push(`../user/${this.state.user._id}`)
+      this.props.history.push(`/user/${isAuthenticated().user._id}`)
 
-      })
-   
+    }) 
  }
     
  
@@ -97,16 +97,15 @@ createpost () {
 
 render() {
 
-const photoUrl = this.state.id ? `${process.env.REACT_APP_API_URL}/user/photo/${this.state.id}?${new Date().getTime()}` : defaultpost;
     return (
 <div className="edit">
       <div className="container cont">
         <h2 className="mt-5 mb-5 text-center font1">
-          <FontAwesomeIcon icon={faPlusCircle} /> Add new Post
+          <FontAwesomeIcon icon={faEdit} /> Update Post
         </h2>
         <img 
-        src={photoUrl} 
-        alt={this.state.name}
+        src={`${process.env.REACT_APP_API_URL}/post/photo/${this.state.id}`} 
+        alt={this.state.title}
         
         className="card-img-top mb-4"
         style={{width: '20%'}}
@@ -156,9 +155,9 @@ const photoUrl = this.state.id ? `${process.env.REACT_APP_API_URL}/user/photo/${
         
         <button
           className="btn btn-raised btn-primary"
-          onClick={() => this.createpost()}
+          onClick={() => this.editpost()}
         >
-          Add new Post
+          Update Post
         </button>
       </div>
 
@@ -168,8 +167,6 @@ const photoUrl = this.state.id ? `${process.env.REACT_APP_API_URL}/user/photo/${
 
     );
   }
-
-  
 }
 
-export default withRouter(CreatePost);
+export default withRouter(EditPost);

@@ -124,7 +124,8 @@ exports.updatePost = (req, res, next) => {
   form.keepExtensions = true;
   form.parse(req, (err, fields, files) => {
     if (err) {
-      return res.status(400).json({ error: "Picture upload failed" });
+      return res.status(400).json({ 
+        error: "Picture upload failed" });
     }
 
     // save post

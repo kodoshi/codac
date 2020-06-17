@@ -32,7 +32,6 @@ export const readuserdata = (userId, tokenkey) => {
 * and return json response
 */
 export const update = (userId, tokenkey, user) => {
-  console.log("USER PROFILE HAS CHANGED", user)
   return fetch(`${process.env.REACT_APP_API_URL}/user/${userId}`, {
     method: "PUT",
     headers: {

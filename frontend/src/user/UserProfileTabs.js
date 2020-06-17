@@ -1,7 +1,6 @@
 import React from "react";
 import { withRouter, Link } from "react-router-dom";
 import profileimg from '../images/icon.jpg';
-import defaultpost from '../images/post.jpg';
 
 
 
