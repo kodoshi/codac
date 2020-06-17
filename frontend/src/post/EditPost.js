@@ -104,7 +104,7 @@ render() {
           <FontAwesomeIcon icon={faEdit} /> Update Post
         </h2>
         <img 
-        src={`${process.env.REACT_APP_API_URL}/post/photo/${this.state.id}`} 
+        src={`${process.env.REACT_APP_API_URL}/post/photo/${this.state.id}?${new Date().getTime()}`} 
         alt={this.state.title}
         
         className="card-img-top mb-4"
