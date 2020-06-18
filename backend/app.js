@@ -8,6 +8,8 @@ const cookieParser = require("cookie-parser");
 const expressValidator = require("express-validator");
 //const fs = require("fs");
 const cors = require("cors");
+const swaggerUi = require("swagger-ui-express"); //API docs
+const openApiDocumentation = require("./docs/api_swagger.json"); //API docs
 
 // Mongoose DB connection
 mongoose.connect(config.dbCFG, {
@@ -30,6 +32,7 @@ const postRoutes = require("./routes/post"); //post routing
 const authRoutes = require("./routes/auth"); //authentication routing
 const userRoutes = require("./routes/user"); //user routing
 app.use("/api", express.static("docs/api_docs.json")); //API Routes Documentation
+app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(openApiDocumentation)); //API Routes Documentation v2
 
 //middlewares
 app.use(morgan("dev"));
