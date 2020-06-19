@@ -1,6 +1,8 @@
 import React, { Component } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faUser } from "@fortawesome/fontawesome-free-solid";
+import { isAuthenticated} from '../auth/file.js';
+
 
 class LoginUser extends Component {
   constructor(props) {
@@ -35,8 +37,13 @@ class LoginUser extends Component {
     if(typeof window !== "undefined")
       {
         localStorage.setItem("tokenkey", JSON.stringify(tokenkey))
-        this.props.history.push("/"); 
-        next();
+        {isAuthenticated() && isAuthenticated().user.role === "subscriber" ? 
+          (
+            this.props.history.push("/")
+          ):
+            this.props.history.push("/admin");
+        }
+      next();
       }
     }
 

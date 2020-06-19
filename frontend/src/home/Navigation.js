@@ -8,23 +8,22 @@ class Navigation extends React.Component {
 
  render(){
 	
-		return (
+	return (
 	
 <nav className="navbar navbar-default">
   <div className="container-fluid">
     <div className="navbar-header">
-<p className="navbar-brand logo text-primary" >Albanian Facebook</p>
-</div>
-    <ul className="nav navbar-tabs">
-    <li className="nav-item">
-		<Link className="nav-link" to="/"> Home </Link> 
-	</li>
-	<li className="nav-item">
-			<Link 
-			className="nav-link text-primary" 
-			to={'/users/'}> Users 
+		<p className="navbar-brand logo text-primary" >Albanian Facebook</p>
+	</div>
+<ul className="nav navbar-tabs">
+	    <li className="nav-item">
+			<Link className="nav-link" to="/"> Home </Link> 
+		</li>
+		<li className="nav-item">
+			<Link to={'/users/'}
+			className="nav-link text-primary"> 
+				Users 
 			</Link>
-		 
 		</li>
 	
 	{!isAuthenticated() && (
@@ -38,45 +37,53 @@ class Navigation extends React.Component {
 		</React.Fragment>
 	)}
 
-	{isAuthenticated() && (
+	{isAuthenticated() && isAuthenticated().user.role === "subscriber" && (
 		<React.Fragment>
-				
-		<li className="nav-item">
-			<Link 
-			className="nav-link text-primary" 
-			to={'/findfriends/'}> Find Friends
-			</Link>
-		 
-		</li>
-		<li className="nav-item">
-			<Link 
-			className="nav-link text-primary" 
-			to={'/add/post'}> Add new Post
-			</Link>
-		 
-		</li>
-		<li className="nav-item">
-			<Link 
-			className="nav-link text-primary" 
-			to={'/user/' + isAuthenticated().user._id}> {isAuthenticated().user.name} 
-			</Link>
-		 
-		</li>
+			<li className="nav-item">
+				<Link 
+				className="nav-link text-primary" 
+				to={'/findfriends/'}> Find Friends
+				</Link>
+			</li>
+
+			<li className="nav-item">
+				<Link 
+				className="nav-link text-primary" 
+				to={'/add/post'}> Add new Post
+				</Link>
+			</li>
+
+			<li className="nav-item">
+				<Link 
+				className="nav-link text-primary" 
+				to={'/user/' + isAuthenticated().user._id}> {isAuthenticated().user.name} 
+				</Link>
+			</li>
+		</React.Fragment>
+	)}
+
+	{isAuthenticated() && (
 		<li className="nav-item">
 			<span
 			className="nav-link text-primary" style={{cursor: "pointer"}}
 			onClick={() => signout(() => this.props.history.push('/'))}> 
-			Signout 
+				Signout 
 			</span> 
 		</li>
-		</React.Fragment>
-
 	)}
-    </ul>
-  </div>
+	
+	{isAuthenticated() && isAuthenticated().user.role === "admin" && (
+	    <li className="nav-item">
+	        <Link to={`/admin`} className="nav-link">
+	            Admin
+	        </Link>
+	    </li>
+	)}
+</ul>
+</div>
 </nav>
-	)
-	}
+)
+}
 }
 
 export default withRouter(Navigation);

@@ -10,31 +10,25 @@ class Homepage extends React.Component {
 		return (
 			
 			<div className="welcome">
-			{!isAuthenticated() && (
-				<div className=" cont1 text-center">
-					<hr />
-					<h2 className="logo">  Welcome to Albanian Facebook </h2>
-					<p >  <FontAwesomeIcon icon={faCamera} />  Share your moments with friends</p>
-					<p> <FontAwesomeIcon icon={faHeart} />  Like or unlike photos, posts, news </p>
-					<p> <FontAwesomeIcon icon={faComment} />  Make different comments to your friend photos, posts  </p>
-					<p> <FontAwesomeIcon icon={faUser} /> Make new friends </p>
-					<hr />
-				</div>
+				{!isAuthenticated() && (
+					<div className=" cont1 text-center">
+						<hr />
+						<h2 className="logo">  Welcome to Albanian Facebook </h2>
+						<p> <FontAwesomeIcon icon={faCamera} />  Share your moments with friends</p>
+						<p> <FontAwesomeIcon icon={faHeart} />  Like or unlike photos, posts, news </p>
+						<p> <FontAwesomeIcon icon={faComment} />  Make different comments to your friend photos, posts  </p>
+						<p> <FontAwesomeIcon icon={faUser} /> Make new friends </p>
+						<hr />
+					</div>
 				)}
-			{isAuthenticated() && (
-			
-				<div>
-					
-					<Posts />
-				
-				</div>
-)}
+				{isAuthenticated() && (
+					<div>
+						<Posts />
+					</div>
+				)}
 			</div>
-
 		);
 	}
-
-
 }
 
 export default Homepage;

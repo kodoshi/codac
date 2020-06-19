@@ -100,8 +100,11 @@ editprofile () {
     //this.userData --> send the userData to the backend
     update(userId, tokenkey, this.userData)
     .then(data => {
-     if (data.error) 
+    if (data.error) 
       this.setState({error: data.error})
+    else if (isAuthenticated().user.role === "admin") {
+                this.props.history.push(`../${this.state.id}`)
+            }
      else 
       updateUser(data, () => {
       //console.log(data)

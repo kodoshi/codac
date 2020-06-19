@@ -141,3 +141,114 @@ export const update = (postId, tokenkey, post) => {
     });
 };
 
+/**
+* @param {string} userId id of the user who liked the post
+* @param {string} tokenkey token that is saved in localStorage
+* @param {string} postId id of the post which has been liked
+* Like method: make a http request to the server.
+* we send the userId and postId to the backend 
+* take the response object from the server
+* and return json response
+*/
+export const like = (userId, tokenkey, postId) => {
+  
+  return fetch(`${process.env.REACT_APP_API_URL}/post/like`, {
+    method: "PUT",
+    headers: {
+      Accept: "application/json",
+      "Content-Type": 'application/json',
+      Authorization: `Bearer ${tokenkey}`
+      },
+      body: JSON.stringify({userId, postId})
+  })
+  .then(response => {
+    return response.json()
+  }).catch((err) =>{
+        console.log(err)
+    });
+};
+
+
+/**
+* @param {string} userId id of the user who liked the post
+* @param {string} tokenkey token that is saved in localStorage
+* @param {string} postId id of the post which has been liked
+* Unlike method: make a http request to the server.
+* we send the userId and postId to the backend 
+* take the response object from the server
+* and return json response
+*/
+export const unlike = (userId, tokenkey, postId) => {
+  
+  return fetch(`${process.env.REACT_APP_API_URL}/post/unlike`, {
+    method: "PUT",
+    headers: {
+      Accept: "application/json",
+      "Content-Type": 'application/json',
+      Authorization: `Bearer ${tokenkey}`
+      },
+      body: JSON.stringify({userId, postId})
+  })
+  .then(response => {
+    return response.json()
+  }).catch((err) =>{
+        console.log(err)
+    });
+};
+
+/**
+* @param {string} userId id of the user 
+* @param {string} tokenkey token that is saved in localStorage
+* @param {string} postId id, to wich post belongs this comment
+* @param {string} comment, the actual comment
+* comment method: make a http request to the server.
+* we send the userId and postId to the backend 
+* take the response object from the server
+* and return json response
+*/
+export const comment = (userId, tokenkey, postId, comment) => {
+  
+  return fetch(`${process.env.REACT_APP_API_URL}/post/comment`, {
+    method: "PUT",
+    headers: {
+      Accept: "application/json",
+      "Content-Type": 'application/json',
+      Authorization: `Bearer ${tokenkey}`
+      },
+      body: JSON.stringify({userId, postId, comment})
+  })
+  .then(response => {
+    return response.json()
+  }).catch((err) =>{
+        console.log(err)
+    });
+};
+
+
+/**
+* @param {string} userId id of the user 
+* @param {string} tokenkey token that is saved in localStorage
+* @param {string} postId id, to wich post belongs this comment
+* @param {string} comment, the actual comment
+* comment method: make a http request to the server.
+* we send the userId and postId to the backend 
+* take the response object from the server
+* and return json response
+*/
+export const uncomment = (userId, tokenkey, postId, comment) => {
+  
+  return fetch(`${process.env.REACT_APP_API_URL}/post/uncomment`, {
+    method: "PUT",
+    headers: {
+      Accept: "application/json",
+      "Content-Type": 'application/json',
+      Authorization: `Bearer ${tokenkey}`
+      },
+      body: JSON.stringify({userId, postId, comment})
+  })
+  .then(response => {
+    return response.json()
+  }).catch((err) =>{
+        console.log(err)
+    });
+};

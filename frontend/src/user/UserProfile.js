@@ -23,9 +23,11 @@ constructor(props) {
      posts: []    
     }
   }
+
+
 /**
 * @param {string} user object  
-* This method checks the user follow list 
+* chekFollow method checks the user follow list 
 * we need to have the authenticated user
 * and match the follower user id with the authenticated user id
 */
@@ -35,18 +37,21 @@ checkFollow (user) {
   //get the user follow list and find each follower
   const match = user.followers.find(follower => {
     //one user have many followers
-    //check if the user id is found -> means the user is in the followers list 
+    //check if the user id is found ---> means the user is in the followers list 
     return follower._id === token.user._id
   })
   return match
 }
 
+
 /**
 * @param {string} userId, id of the authenticated user  
-* This method will load all the post that the signle user has created 
+* loadPosts method will load all the post that the single user has created
+* We take the Tokenkey from the authenticated user
+* we set userId and tokenkey as parameter on the listbyuser method extracted from apiPosts
 * from listbyuser method we handle the server response
 * in case of error --> console log the error
-* else set posts to the state
+* else set data to the posts state
 */
 loadPosts (userId) {
   //we need to have the authenticated user
@@ -61,6 +66,7 @@ loadPosts (userId) {
   })
 }
 
+
 /**
 * ClickFollow method takes another method as an argument wich will be called by the child Component
 * we take the user id from the authenticated user
@@ -69,7 +75,7 @@ loadPosts (userId) {
 * callApi will handle the request from the server and check for errors, if there is any error -> set it to the state
 * else set the user data to the state and pupolate following (if it was false would be true or oposite)
 */
-clickFollow = callApi =>{
+clickFollow = callApi => {
   const userId = isAuthenticated().user._id;
   const tokenkey = isAuthenticated().token;
   //this metthod will give us the response follow or unfollow
@@ -82,10 +88,12 @@ clickFollow = callApi =>{
 
 
 /**
-*
+* We take the postId from the props params
+* We take the Tokenkey from the authenticated user
+* we set those parameter to the readuserdata method that we extracted from apiUsers
 * Handle the response object from readuserdata method
-* if no error set State with data and display user information in the right form
 * if error make a redirection to the signin page -> it means you are not logged in
+* if no error set State with data and display user information in the right form
 */
 
 componentDidMount() {
@@ -145,20 +153,16 @@ const photoUrl = this.state.user._id ? `${process.env.REACT_APP_API_URL}/user/ph
       <hr/>
   </div>
 
-
-      {isAuthenticated().user && isAuthenticated().user._id === this.state.user._id ? 
-        (
-        <>
-         <div className="row">
-  <div className="col md-12 ">
-    <hr/>
-     
-      <p className=" font text-warning"> <i>{`Account updated at: ${new Date(this.state.user.updated_at).toDateString()}`}</i></p> 
-      <hr/>
-   
-  </div>
- 
-</div>
+{/* if the user is logged in and tha authenticated user id matches with the user Id in the state display the information below*/}    
+    {isAuthenticated().user && isAuthenticated().user.role !== "admin" && isAuthenticated().user._id === this.state.user._id ? (
+      <React.Fragment>
+          <div className="row">
+            <div className="col md-12 ">
+              <hr/>
+              <p className=" font text-warning"> <i>{`Account updated at: ${new Date(this.state.user.updated_at).toDateString()}`}</i></p> 
+              <hr/>
+            </div>
+          </div>
 
           <div className="d-inline-block">
             <Link className="btn btn-raised btn-success mr-5" to={`/user/edit/${this.state.user._id}`}>
@@ -167,20 +171,39 @@ const photoUrl = this.state.user._id ? `${process.env.REACT_APP_API_URL}/user/ph
           </div>
           <div className="d-inline-block">
             <DeleteUser userId={this.state.user._id} />
-
           </div>
-           <hr/>
-        </>
-        ) : 
-        <FollowUnfollowUser following={this.state.following} onButtonClick={this.clickFollow} />
-      }
+          <hr/>
+      </React.Fragment>
+        ): <FollowUnfollowUser following={this.state.following} onButtonClick={this.clickFollow} />
+    }
+
+{/* if the user is not logged in display FollowUnfollowUser Component with the following and onButtonClick props*/}    
+
+
+    <div>
+  {/* if the user is logged in and has the admin role display there 2 Buttons*/}    
+      {isAuthenticated().user && isAuthenticated().user.role === "admin" && (
+        <div class="card mt-5">
+          <div className="card-body ">
+            <h5 className="card-title text-dark"> Admin </h5>
+            <p className="mb-2 text-danger"> Edit/Delete as an Admin </p>
+            <Link
+            className="btn btn-raised btn-success mr-5"
+            to={`/user/edit/${this.state.user._id}`}
+            >
+              Edit Profile
+            </Link>
+            <DeleteUser userId={this.state.user._id} />
+          </div>
+        </div>
+      )}
+    </div>
      <hr/>
     <UserProfileTabs 
     followers={this.state.user.followers} 
     following={this.state.user.following}
     posts={this.state.posts}/>
-
-  </div>
+</div>
 </div>
 </div>
 )

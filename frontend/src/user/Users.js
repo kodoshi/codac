@@ -7,7 +7,7 @@ import { listusers } from './apiUsers.js';
 import profileimg from '../images/icon.jpg';
 
 
-class User extends React.Component {
+class Users extends React.Component {
 constructor(props) {
     super(props);
 
@@ -49,6 +49,7 @@ render() {
     //loop on all users  
     this.state.users.map((user, i) => 
     <div className="cont4  text-dark col-md-4 " key={i}>
+    <div className="card-body">
       <img 
       className= "card-img-top mb-4" 
       src={`${process.env.REACT_APP_API_URL}/user/photo/${user._id}`} 
@@ -60,12 +61,14 @@ render() {
       <h4 className="text-dark"><b><i>{user.name}</i></b> </h4>
       <p><i>{user.email}</i></p>  <Link to={`/user/${user._id}`} className="btn text-light bg-primary"> View Profile </Link>
 
+    </div> 
 
     </div> 
     )
   }
 
 </div>
+
 
 </div>
 </div>
@@ -77,4 +80,4 @@ render() {
 
 }
 
-export default withRouter(User);
+export default withRouter(Users);

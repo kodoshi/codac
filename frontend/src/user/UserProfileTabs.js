@@ -36,6 +36,7 @@ render() {
 		    	</div>
 		    )}
 		   </div>
+		   
 		   <div className="col-md-4">
 				<h3 className="text-info"> Following </h3>
 		   		<hr/>
@@ -62,6 +63,7 @@ render() {
 		    	</div>
 		    )}
 		   </div>
+
 		   <div className="col-md-4">
 				<h3 className="text-info"> Posts </h3>
 		   		<hr/>
