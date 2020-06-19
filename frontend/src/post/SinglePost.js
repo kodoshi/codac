@@ -170,13 +170,13 @@ render() {
         this.state.like ? 
         (
           <h3 onClick={() => this.clickLike()}> <FontAwesomeIcon icon={faThumbsUp} style={{"color": "green", "padding": "2px"}}/>
-             {this.state.likes} Like
+             {this.state.likes} Like(s)
           </h3>
         ) : 
 
         (
           <h3 onClick={() => this.clickLike()}><FontAwesomeIcon icon={faThumbsDown} style={{"color": "orange", "padding": "2px"}}/>
-             {this.state.likes} Like
+             {this.state.likes} Like(s)
           </h3>
         )
       }

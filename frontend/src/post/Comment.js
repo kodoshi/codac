@@ -127,7 +127,7 @@ render() {
 	
 	</div>
 	     <div className="col-md-20">
-			<h3 className="text-primary">{this.props.comments.length} Comments </h3>
+			<h3 className="text-primary">{this.props.comments.length} Comment(s) </h3>
 		   	{this.props.comments.map((comment, index) => 
 		    	<div key={index} >
 			    	<div>
