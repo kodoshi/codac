@@ -1,0 +1,671 @@
+swagger: "2.0"
+info:
+  description: "AlbFB, the new social networking platform for Albanians everywhere."
+  version: "1.0.0"
+  title: "AlbFB"
+  contact:
+    email: "team2@fakemail.al"
+  license:
+    name: "GPL v2.0"
+    url: "https://www.gnu.org/licenses/old-licenses/gpl-2.0.en.html"
+host: "localhost:3000"
+tags:
+- name: "Main API"
+  description: "Carries out every backend operation"
+  externalDocs:
+    description: "Find out more"
+    url: "http://localhost:4242"
+- name: "auth"
+  description: "Authentication routes for users"
+- name: "user"
+  description: "Operations about users"
+- name: "post"
+  description: "Operations about posts"
+schemes:
+- "http"
+paths:
+  /posts:
+    get:
+      tags:
+      - "post"
+      summary: "Get all posts"
+      description: "Displays all posts, with DB fields like: posted_by, id, name, title, body, created_at, likes, comments and photo, sorted by earliest created. Returns these posts in json format"
+      produces:
+      - "application/json"
+      responses:
+        default:
+          description: "Promise { pending }"
+  /post/like:
+    put:
+      tags:
+      - "post"
+      summary: "Adds a like to a post"
+      description: "Persists a userId into the likes DB field of a certain post, which is defined by the postId. Returns an error in json format if operation failed"
+      produces:
+      - "application/json"
+      parameters:
+      - in: "body"
+        name: "postId"
+        description: "Id of post which is being liked"
+        required: true
+        type: "string"
+      - in: "body"
+        name: "userId"
+        description: "Id of user which is liking a post"
+        required: true
+        type: "string"
+      responses:
+        default:
+          description: ""
+        "400":
+          description: "{ error : Error message here}"
+  /post/unlike:
+    put:
+      tags:
+      - "post"
+      summary: "Removes a like from a post"
+      description: "Removes a userId from the likes DB field of a certain post, which is defined by the postId. Returns an error in json format if operation failed"
+      produces:
+      - "application/json"
+      parameters:
+      - in: "body"
+        name: "postId"
+        description: "Id of post which is being unliked"
+        required: true
+        type: "string"
+      - in: "body"
+        name: "userId"
+        description: "Id of user which is unliking a post"
+        required: true
+        type: "string"
+      responses:
+        default:
+          description: ""
+        "400":
+          description: "{ error : Error message here}"
+  /post/comment:
+    put:
+      tags:
+      - "post"
+      summary: "Adds a comment to a post"
+      description: "Persists a userId to the comments.posted_by DB field of a certain post, which is defined by the postId. Also persists the content of the post into the comment field. Returns an error in json format if operation failed"
+      produces:
+      - "application/json"
+      parameters:
+      - in: "body"
+        name: "postId"
+        description: "Id of post which is being commented on"
+        required: true
+        type: "string"
+      - in: "body"
+        name: "comment"
+        description: "Content of the comment being posted"
+        type: "string"
+        required: true
+      - in: "body"
+        name: "userId"
+        description: "Id of user which is commenting"
+        type: "string"
+        required: true
+      responses:
+        default:
+          description: ""
+        "400":
+          description: "{ error : Error message here}"
+  /post/uncomment:
+    put:
+      tags:
+      - "post"
+      summary: "Removes a comment from a post"
+      description: "Removes a userId to the comments.posted_by DB field of a certain post, which is defined by the postId, and removes the comment content from the comments DB field. Returns an error in json format if operation failed"
+      produces:
+      - "application/json"
+      parameters:
+      - in: "body"
+        name: "postId"
+        description: "Id of post which is being commented on"
+        required: true
+        type: "string"
+      - in: "body"
+        name: "userId"
+        description: "Id of user which is commenting"
+        required: true
+        type: "string"
+      responses:
+        default:
+          description: ""
+        "400":
+          description: "{ error : Error message here}"
+  /post/new/:userId:
+    post:
+      tags:
+      - "post"
+      summary: "Creates a post"
+      description: "Creates a new post, to be filled by the fields defined in the request object. This includes photo upload. Returns error on failure, or the saved post itself, in json"
+      produces:
+      - "application/x-www-form-urlencoded"
+      parameters:
+      - in: "body"
+        name: "userId"
+        description: "Id of user which is adding a post"
+        required: true
+        type: "string"
+      - in: "body"
+        name: "fields"
+        required: true
+        schema:
+          $ref: "#definitions/Post"
+      responses:
+        default:
+          description: "{
+            id: 'string',
+            title: 'string',
+            body: 'string',
+            photo: {},
+            posted_by: 'string',
+            created_at: '2020-06-22T21:00:44.814Z',
+            updated_at: '2020-06-22T21:00:44.814Z',
+            likes: 'string',
+            comments: 'string'
+          }
+          "
+        "400":
+          description: "{ error : Error message here}"
+  /post/by/:userId:
+    get:
+      tags:
+      - "post"
+      summary: "Displays a post"
+      description: "Displays all posts by a certain userId which is passed in the request.profile object, returns all posts in json format"
+      produces:
+      - "application/json"
+      parameters:
+      - in: "body"
+        name: "userId"
+        description: "Id of user which post's are being showed"
+        required: true
+        type: "string"
+      responses:
+        default:
+          description: "{
+            id: 'string',
+            title: 'string',
+            body: 'string',
+            photo: {},
+            posted_by: 'string',
+            created_at: '2020-06-22T21:00:44.814Z',
+            updated_at: '2020-06-22T21:00:44.814Z',
+            likes: 'string',
+            comments: 'string'
+          }
+          "
+        "400":
+          description: "{ error : Error message here}"
+  /post/:postId:
+    get:
+      tags:
+      - "post"
+      summary: "Displays a post"
+      description: "Displays a certain post in json format"
+      produces:
+      - "application/json"
+      parameters:
+      - in: "body"
+        name: "postId"
+        description: "Id of post to be shown"
+        required: true
+        type: "string"
+      responses:
+        default:
+          description: "{
+            id: 'string',
+            title: 'string',
+            body: 'string',
+            photo: {},
+            posted_by: 'string',
+            created_at: '2020-06-22T21:00:44.814Z',
+            updated_at: '2020-06-22T21:00:44.814Z',
+            likes: 'string',
+            comments: 'string'
+          }"
+    put:
+      tags:
+      - "post"
+      summary: "Updates a post"
+      description: "Updates a certain post and then returns it in json format"
+      produces:
+      - "application/json"
+      parameters:
+      - in: "body"
+        name: "postId"
+        description: "Id of post to be updated"
+        required: true
+        type: "string"
+      - in: "body"
+        name: "fields"
+        required: true
+        schema:
+          $ref: "#definitions/Post"
+      responses:
+        default:
+          description: "{
+            id: 'string',
+            title: 'string',
+            body: 'string',
+            photo: {},
+            posted_by: 'string',
+            created_at: '2020-06-22T21:00:44.814Z',
+            updated_at: '2020-06-22T21:00:44.814Z',
+            likes: 'string',
+            comments: 'string'
+          }"
+        "400":
+          description: "{ error : Error message here}"
+    delete:
+      tags:
+      - "post"
+      summary: "Deletes a post"
+      description: "Deletes a certain post and based on postId"
+      produces:
+      - "application/json"
+      parameters:
+      - in: "body"
+        name: "postId"
+        description: "Id of post to be deleted"
+        required: true
+        type: "string"
+      responses:
+        default:
+          description: "Post was deleted"
+        "400":
+          description: "{ error : Error message here}"
+  /post/photo/:postId:
+    get:
+      tags:
+      - "post"
+      summary: "Displays a photo of a post"
+      description: "Displays a certain post's photo"
+      produces:
+      - "application/json"
+      parameters:
+      - in: "body"
+        name: "postId"
+        description: "Id of post's photo to be shown"
+        required: true
+        type: "string"
+      responses:
+        default:
+          description: "Buffer data"
+  /signup:
+    post:
+      tags:
+      - "auth"
+      summary: "Registers a new user"
+      description: "Takes user form and persists it in the database, if valid"
+      produces:
+      - "application/json"
+      parameters:
+      - name: "email"
+        in: "body"
+        description: "The signup email"
+        required: true
+        type: "string"
+      - name: "username"
+        in: "body"
+        description: "The signup user name"
+        required: true
+        type: "string"
+      - name: "password"
+        in: "body"
+        description: "The signup password in plain text"
+        required: true
+        type: "string"
+      responses:
+        "200":
+          description: "Sign-up successful"
+  /signin:
+    post:
+      tags:
+      - "auth"
+      summary: "Authenticates and logs in an existing user"
+      description: "Takes user form and checks it in the database, if valid it creates login cookie with JWT token, return said token and user in JSON"
+      produces:
+      - "application/json"
+      parameters:
+      - name: "email"
+        in: "body"
+        description: "The signin email"
+        required: true
+        type: "string"
+      - name: "password"
+        in: "body"
+        description: "The signin password in plain text"
+        required: true
+        type: "string"
+      responses:
+        "200":
+          description: "token, user: { _id, email, name, role }"
+  /signout:
+    get:
+      tags:
+      - "auth"
+      summary: "Signs a user out"
+      description: "Clears current auth cookie/JWT token to log user out"
+      produces:
+      - "application/json"
+      responses:
+        "200":
+          description: "Sign out successful"
+  /users:
+    get:
+      tags:
+      - "user"
+      summary: "Displays all users"
+      description: "Returns all users and their content in json format"
+      produces:
+      - "application/json"
+      responses:
+        "200":
+          description: "users: 'name email created_at updated_at role'"
+  /user/follow:
+    put:
+      tags:
+      - "user"
+      summary: "Adds a follower to a user"
+      description: "Receives followId and userId from frontend, persists followId in the DB, the userId being followed gets the followId saved into his 'followers' DB field, returns the user being followed in json format, or error in json format"
+      produces:
+      - "application/json"
+      parameters:
+      - in: "body"
+        name: "followId"
+        description: "Id of user which is a follower"
+        required: true
+      - in: "body"
+        name: "userId"
+        description: "Id of user which is being followed"
+        required: true
+      responses:
+        default:
+          description: "{
+            photo: {
+            contentType: 'image/jpeg',
+            data: Binary {
+            _bsontype: 'Binary',
+            sub_type: 0,
+            position: 8134,
+            buffer: <Buffer>
+            }
+            },
+            following: [ {} ],
+            followers: [ {} ],
+            role: 'subscriber',
+            _id: 5ee24018b7e9dc1a7174badc,
+            name: 'Default Name',
+            email: 'default@gmail.com',
+            created_at: 2020-06-11T14:30:48.952Z,
+            __v: 0,
+            about: '',
+            updated_at: 2020-06-15T13:22:59.332Z
+            }
+          "
+        "400":
+          description: "{ error : Default error here}"
+  /user/unfollow:
+    put:
+      tags:
+      - "user"
+      summary: "Removes a follower to a user"
+      description: "Receives followId and userId from frontend, removes followId from the user identified with the userId from the DB, returns the user being followed in json format, or error in json format"
+      produces:
+      - "application/json"
+      parameters:
+      - in: "body"
+        name: "followId"
+        description: "Id of user which is a follower"
+        required: true
+      - in: "body"
+        name: "userId"
+        description: "Id of user which is being followed"
+        required: true
+      responses:
+        default:
+          description: "{
+            photo: {
+            contentType: 'image/jpeg',
+            data: Binary {
+            _bsontype: 'Binary',
+            sub_type: 0,
+            position: 8134,
+            buffer: <Buffer>
+            }
+            },
+            following: [ {} ],
+            followers: [ {} ],
+            role: 'subscriber',
+            _id: 5ee24018b7e9dc1a7174badc,
+            name: 'Default Name',
+            email: 'default@gmail.com',
+            created_at: 2020-06-11T14:30:48.952Z,
+            __v: 0,
+            about: '',
+            updated_at: 2020-06-15T13:22:59.332Z
+            }
+          "
+        "400":
+          description: "{ error : Default error here}"
+  /user/tofollow/:userId:
+    get:
+      tags:
+      - "user"
+      summary: "Displays users not being followed already"
+      description: "Based on active userId it returns the users not being followed by this userId in json format, or error in json format"
+      produces:
+      - "application/json"
+      parameters:
+      - in: "body"
+        name: "userId"
+        description: "Id of user"
+        required: true
+      responses:
+        default:
+          description: "{
+            name: 'Default Name',
+            name: 'Default Name2',
+            name: 'Default Name3',
+            }
+          "
+        "400":
+          description: "{ error : Error message here}"
+  /user/:userId:
+    get:
+      tags:
+      - "user"
+      summary: "Returns user profile specified in request body"
+      description: "Returns full user profile in json format, from the userId in the query"
+      produces:
+      - "application/json"
+      parameters:
+      - in: "body"
+        name: "userId"
+        description: "Id of user to display"
+        required: true
+      responses:
+        default:
+          description: "{
+            photo: {
+            contentType: 'image/jpeg',
+            data: Binary {
+            _bsontype: 'Binary',
+            sub_type: 0,
+            position: 8134,
+            buffer: <Buffer>
+            }
+            },
+            following: [ {} ],
+            followers: [ {} ],
+            role: 'subscriber',
+            _id: 5ee24018b7e9dc1a7174badc,
+            name: 'Default Name',
+            email: 'default@gmail.com',
+            created_at: 2020-06-11T14:30:48.952Z,
+            __v: 0,
+            about: '',
+            updated_at: 2020-06-15T13:22:59.332Z
+            }
+          "
+    put:
+      tags:
+      - "user"
+      summary: "Updates user profile specified in request body"
+      description: "Checks if current user is authorized to perform this update and returns updated user profile in json format, from the userId in the query. "
+      produces:
+      - "application/json"
+      parameters:
+      - in: "body"
+        name: "userId"
+        description: "Id of user to update"
+        required: true
+      - in: "body"
+        name: "role"
+        description: "Role of user, subscriber or admin"
+        required: true
+      responses:
+        default:
+          description: "{
+            photo: {
+            contentType: 'image/jpeg',
+            data: Binary {
+            _bsontype: 'Binary',
+            sub_type: 0,
+            position: 8134,
+            buffer: <Buffer>
+            }
+            },
+            following: [ {} ],
+            followers: [ {} ],
+            role: 'subscriber',
+            _id: 5ee24018b7e9dc1a7174badc,
+            name: 'Default Name',
+            email: 'default@gmail.com',
+            created_at: 2020-06-11T14:30:48.952Z,
+            __v: 0,
+            about: '',
+            updated_at: 2020-06-15T13:22:59.332Z
+            }
+          "
+        "400":
+          description: "{ error : Picture upload failed}"
+        "403":
+          description: "{ error : User is not authorized to perform this action}"
+    delete:
+      tags:
+      - "user"
+      summary: "Deletes user profile specified in request body"
+      description: "Checks if current user is authorized to perform this deletion and returns a json message of success"
+      produces:
+      - "application/json"
+      parameters:
+      - in: "body"
+        name: "userId"
+        description: "Id of user to delete"
+        required: true
+      - in: "body"
+        name: "role"
+        description: "Role of user, subscriber or admin"
+        required: true
+      responses:
+        default:
+          description: "{ message : User deletion successful}"
+        "400":
+          description: "{ error : Error message here}"
+        "403":
+          description: "{ error : User is not authorized to perform this action}"
+  /user/photo/:userId:
+    get:
+      tags:
+      - "user"
+      summary: "Returns profile photo of user specified in request body"
+      description: "If profile photo is defined in the DB, it gets returned in Buffer data"
+      produces:
+      - "application/json"
+      parameters:
+      - in: "body"
+        name: "userId"
+        description: "Id of user whose photo to get"
+        required: true
+      responses:
+        default:
+          description: "Buffer data of photo"
+securityDefinitions:
+  api_key:
+    type: "apiKey"
+    name: "api_key"
+    in: "header"
+definitions:
+  Post:
+    type: "object"
+    properties:
+      id:
+        type: "string"
+      title:
+        type: "string"
+      body:
+        type: "string"
+      photo:
+        type: "object"
+        description: "Buffer data"
+      posted_by:
+        type: "string"
+        description: "Holds UserId of poster, related to only one User model"
+      created_at:
+        type: "string"
+        format: "date-time"
+      updated_at:
+        type: "string"
+        format: "date-time"
+      likes:
+        type: "string"
+        description: "Holds UserId of liker, related to many User models"
+      comments:
+        type: "string"
+        description: "Holds UserId of commenter, related to many User models"
+    xml:
+      name: "Post"
+  User:
+    type: "object"
+    properties:
+      id:
+        type: "string"
+      name:
+        type: "string"
+      email:
+        type: "string"
+      hashed_password:
+        type: "string"
+      salt:
+        type: "string"
+      created_at:
+        type: "string"
+        format: "date-time"
+      updated_at:
+        type: "string"
+        format: "date-time"
+      photo:
+        type: "object"
+        description: "Buffer data"
+      about:
+        type: "string"
+      following:
+        type: "string"
+        description: "Holds UserId of the followee, related to many User models"
+      followers:
+        type: "string"
+        description: "Holds UserId of the followers, related to many User models"
+      role:
+        type: "string"
+        description: "Can be 'Admin' or 'Subscriber'"
+    xml:
+      name: "User"
+externalDocs:
+  description: "Find out more about Swagger"
+  url: "http://swagger.io"
