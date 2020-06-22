@@ -205,7 +205,7 @@ render() {
 {/* if the user is logged in and has the admin role display there 2 Buttons*/}    
   <div>
     {isAuthenticated().user && isAuthenticated().user.role === "admin" && (
-      <div class="card mt-5">
+      <div className="card mt-5">
           <div className="card-body">
             <h5 className="card-title">Admin</h5>
             <p className="mb-2 text-danger"> Edit/Delete as an Admin </p>

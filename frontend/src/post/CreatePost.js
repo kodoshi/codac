@@ -80,6 +80,7 @@ createpost () {
     const userId = isAuthenticated().user._id;
     const tokenkey = isAuthenticated().token;
     //this.postData --> send the postData to the backend
+    //this.postData will return a json response 
     create(userId, tokenkey, this.postData)
     .then(data => {
      if (data.error) 

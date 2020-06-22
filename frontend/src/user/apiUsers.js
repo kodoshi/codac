@@ -108,7 +108,7 @@ export const updateUser = (user, next) => {
       let auth =  JSON.parse(localStorage.getItem("tokenkey"))   
       //update the user property of tokenkey
       auth.user = user
-      //set to the local storage
+      //set to the local storage the updated userS
       localStorage.setItem("tokenkey", JSON.stringify(auth))
       next(); 
     }

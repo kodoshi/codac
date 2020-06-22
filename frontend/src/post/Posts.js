@@ -48,7 +48,9 @@ render() {
   {
     //loop on all posts  
     this.state.posts.map((post, i) => {
+      //id of the user who creted the post
       const postId = post.posted_by ? post.posted_by._id : ""
+      //name of the user who creted the post
       const postName = post.posted_by ? post.posted_by.name : " Unknown"
 
     return <div className="cont4  text-dark col-md-4 " key={i}>

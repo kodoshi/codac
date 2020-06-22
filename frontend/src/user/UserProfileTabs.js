@@ -21,7 +21,7 @@ render() {
 			    		<div>
 			    			<Link to={`/user/${user._id}`}>
 			    				<img
-			    				className="float-left"
+			    				className="float-left mr-2"
 			    				height="30px"
        							src={`${process.env.REACT_APP_API_URL}/user/photo/${user._id}`} 
      							alt={user.name}

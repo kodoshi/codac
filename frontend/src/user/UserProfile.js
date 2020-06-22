@@ -1,4 +1,4 @@
-  import React from "react";
+import React from "react";
 import { isAuthenticated } from "../auth/file.js";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faUser } from "@fortawesome/fontawesome-free-solid";
@@ -78,7 +78,8 @@ loadPosts (userId) {
 clickFollow = callApi => {
   const userId = isAuthenticated().user._id;
   const tokenkey = isAuthenticated().token;
-  //this metthod will give us the response follow or unfollow
+  //this metthod will give us the response follow or unfollow the user in the state 
+
   callApi(userId, tokenkey, this.state.user._id)
   .then(data => {
     if(data.error) this.setState({error: data.error})
