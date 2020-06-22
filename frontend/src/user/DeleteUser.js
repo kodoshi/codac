@@ -22,8 +22,16 @@ deleteaccount = ()=> {
       console.log(data.error)
     }
     else 
-      signout(() => console.log("User is deleted"));
-  	  this.props.history.push("/")
+      
+    {isAuthenticated() && isAuthenticated().user.role === "subscriber" ? 
+      (
+        signout(() => this.props.history.push("/"))
+        
+      ):
+
+      this.props.history.push("/users")
+  }
+  	  
   });
 }
 

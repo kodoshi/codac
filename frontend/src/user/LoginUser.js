@@ -28,9 +28,10 @@ class LoginUser extends Component {
 
 /**
 * @param {string} tokenkey token that is saved in localStorage.
-* @param {*} next allows the method to go to the next middleware
+* @param {*} next callback function,  allows the method to go to the next middleware
 * Authenticate method: if the token exists save it to the localStorage.
-* redirect to homepage
+* if User role is "subscriber" redirect to homepage
+* if User role is "admin" redirect to admin page
 */
 
   authenticate(tokenkey, next){

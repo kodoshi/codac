@@ -86,7 +86,7 @@ createpost () {
       this.setState({error: data.error})
      else 
      //console.log("New Post:", data)
-       this.props.history.push(`../user/${this.state.user._id}`)
+       this.props.history.push(`/`)
 
       })
    

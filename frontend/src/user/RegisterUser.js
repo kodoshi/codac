@@ -55,8 +55,7 @@ class RegisterUser extends React.Component {
     if (data.error) this.setState({error: data.error})
       else 
         this.props.history.push("/signin"); 
-
-  }).catch((err) =>{
+    }).catch((err) =>{
         console.log(err)
     });
 
