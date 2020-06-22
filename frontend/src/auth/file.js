@@ -1,7 +1,8 @@
 
 /**
 * @param {*} next, the callback functions that allows the method to go to the next middleware
-* Signout method: if the token exists in the localStorage remove it.
+* Signout method: Check if we have the window object we will have access to the localStorage .
+* if the token exists in the localStorage remove it.
 * Make request to the server and take the json response of it.  
 */
   export const signout = next => {

@@ -116,7 +116,7 @@ componentDidMount() {
 }
 
 componentWillReceiveProps(props) {
-  const userId = this.props.match.params.userId;
+  const userId = props.match.params.userId;
   const tokenkey = isAuthenticated().token;
   readuserdata(userId, tokenkey)
   .then(data => {
@@ -153,7 +153,7 @@ const photoUrl = this.state.user._id ? `${process.env.REACT_APP_API_URL}/user/ph
       <hr/>
   </div>
 
-{/* if the user is logged in and tha authenticated user id matches with the user Id in the state display the information below*/}    
+{/* if the user is logged in and the authenticated user id matches with the user Id in the state display the information below*/}    
     {isAuthenticated().user && isAuthenticated().user.role !== "admin" && isAuthenticated().user._id === this.state.user._id ? (
       <React.Fragment>
           <div className="row">

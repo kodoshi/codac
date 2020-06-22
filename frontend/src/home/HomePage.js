@@ -1,4 +1,4 @@
-import React from "react";
+ import React from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCamera, faHeart, faComment, faUser } from "@fortawesome/fontawesome-free-solid";
 import Posts from '../post/Posts'; 
