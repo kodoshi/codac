@@ -87,7 +87,7 @@ editpost () {
      if (data.error) 
       this.setState({error: data.error})
      else 
-      this.props.history.push(`/user/${isAuthenticated().user._id}`)
+      this.props.history.push(`/`)
 
     }) 
  }
