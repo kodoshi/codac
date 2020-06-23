@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>JSDoc: Source: post/CreatePost.js</title>
+
+    <script src="scripts/prettify/prettify.js"> </script>
+    <script src="scripts/prettify/lang-css.js"> </script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+</head>
+
+<body>
+
+<div id="main">
+
+    <h1 class="page-title">Source: post/CreatePost.js</h1>
+
+    
+
+
+
+    
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>import React from "react";
+import { isAuthenticated } from "../auth/file.js";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faPlusCircle } from "@fortawesome/fontawesome-free-solid";
+import defaultpost from "../images/post.jpg";
+import { withRouter } from "react-router";
+import { create } from "./apiPost.js";
+
+class CreatePost extends React.Component {
+  constructor(props) {
+    super(props);
+
+    this.state = {
+      title: "",
+      body: "",
+      photo: "",
+      user: {},
+      error: "",
+      fileSize: 0,
+    };
+  }
+
+  /**
+   * On the Component Mount we will save FormData on the postData variable
+   * and set authenticated user to the state
+   */
+  componentDidMount() {
+    //post Form Data Browser API
+    this.postData = new FormData();
+    this.setState({ user: isAuthenticated().user });
+  }
+
+  /**
+   * Validation of the create post page
+   * validate photo, title, content(body)
+   */
+  validate() {
+    const { title, body, fileSize } = this.state;
+    if (fileSize > 10000) {
+      this.setState({ error: "Filesize should be less than 100kb " });
+      return false;
+    }
+    if (title.length === 0 || body.length === 0) {
+      this.setState({ error: "All fields are required" });
+      return false;
+    }
+    return true;
+  }
+
+  handleChange = (name) => (event) => {
+    this.setState({ error: "" });
+
+    //if the name is 'photo' take event.target.files the first []
+    const value = name === "photo" ? event.target.files[0] : event.target.value;
+    //get the fileSize and save it to the state if the size is not defined get the default value of fileSize
+    const fileSize = name === "photo" ? event.target.files[0].size : 0;
+
+    //save the values on the postData
+    this.postData.set(name, value);
+
+    this.setState({ [name]: value, fileSize });
+  };
+
+  /**
+   * validate title, body and photo if they are correct go ti next step
+   * handle server response from create method and if there is an error set it to the state
+   * if there is no error do the update and redirect to user profile page
+   */
+  createpost() {
+    if (this.validate()) {
+      //take the user id and token from the local storage
+      const userId = isAuthenticated().user._id;
+      const tokenkey = isAuthenticated().token;
+      //this.postData --> send the postData to the backend
+      //this.postData will return a json response
+      create(userId, tokenkey, this.postData).then((data) => {
+        if (data.error) this.setState({ error: data.error });
+        //console.log("New Post:", data)
+        else this.props.history.push(`/`);
+      });
+    }
+  }
+
+  render() {
+    const photoUrl = this.state.id
+      ? `${process.env.REACT_APP_API_URL}/user/photo/${
+          this.state.id
+        }?${new Date().getTime()}`
+      : defaultpost;
+    return (
+      &lt;div className="edit">
+        &lt;div className="container cont">
+          &lt;h2 className="mt-5 mb-5 text-center font1">
+            &lt;FontAwesomeIcon icon={faPlusCircle} /> Add new Post
+          &lt;/h2>
+          &lt;img
+            src={photoUrl}
+            alt={this.state.name}
+            className="card-img-top mb-4"
+            style={{ width: "20%" }}
+            onError={(index) => (index.target.src = `${defaultpost}`)}
+          />
+
+          &lt;div
+            className="alert alert-danger"
+            style={{ display: this.state.error ? "" : "none" }}
+          >
+            {this.state.error}
+          &lt;/div>
+          &lt;div className="form-group">
+            &lt;label className="text-light font">Post Photo: &lt;/label>
+            &lt;input
+              type="file"
+              onChange={this.handleChange("photo")}
+              accept="image/*"
+              className="form-control bg-light"
+            />
+          &lt;/div>
+
+          &lt;div className="form-group">
+            &lt;label className="text-light font">Title: &lt;/label>
+            &lt;input
+              type="text"
+              onChange={this.handleChange("title")}
+              value={this.state.title}
+              className="form-control bg-light"
+              name="name"
+              required
+            />
+          &lt;/div>
+          &lt;div className="form-group">
+            &lt;label className="text-light font">Post Body: &lt;/label>
+            &lt;textarea
+              type="text"
+              onChange={this.handleChange("body")}
+              value={this.state.body}
+              className="form-control bg-light"
+              name="about"
+              maxLength="500"
+              required
+            />
+          &lt;/div>
+
+          &lt;button
+            className="btn btn-raised btn-primary"
+            onClick={() => this.createpost()}
+          >
+            Add new Post
+          &lt;/button>
+        &lt;/div>
+      &lt;/div>
+    );
+  }
+}
+
+export default withRouter(CreatePost);
+</code></pre>
+        </article>
+    </section>
+
+
+
+
+</div>
+
+<nav>
+    <h2><a href="index.html">Home</a></h2><h3>Global</h3><ul><li><a href="global.html#comment">comment</a></li><li><a href="global.html#create">create</a></li><li><a href="global.html#findPeople">findPeople</a></li><li><a href="global.html#follow">follow</a></li><li><a href="global.html#isAuthenticated">isAuthenticated</a></li><li><a href="global.html#like">like</a></li><li><a href="global.html#listbyuser">listbyuser</a></li><li><a href="global.html#listposts">listposts</a></li><li><a href="global.html#listusers">listusers</a></li><li><a href="global.html#PrivateRoute">PrivateRoute</a></li><li><a href="global.html#readuserdata">readuserdata</a></li><li><a href="global.html#remove">remove</a></li><li><a href="global.html#signout">signout</a></li><li><a href="global.html#singlepost">singlepost</a></li><li><a href="global.html#uncomment">uncomment</a></li><li><a href="global.html#unfollow">unfollow</a></li><li><a href="global.html#unlike">unlike</a></li><li><a href="global.html#update">update</a></li><li><a href="global.html#updateUser">updateUser</a></li></ul>
+</nav>
+
+<br class="clear">
+
+<footer>
+    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 3.6.4</a> on Tue Jun 23 2020 11:56:46 GMT+0200 (Central European Summer Time)
+</footer>
+
+<script> prettyPrint(); </script>
+<script src="scripts/linenumber.js"> </script>
+</body>
+</html>

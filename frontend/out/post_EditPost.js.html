@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>JSDoc: Source: post/EditPost.js</title>
+
+    <script src="scripts/prettify/prettify.js"> </script>
+    <script src="scripts/prettify/lang-css.js"> </script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+</head>
+
+<body>
+
+<div id="main">
+
+    <h1 class="page-title">Source: post/EditPost.js</h1>
+
+    
+
+
+
+    
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>import React from "react";
+import { withRouter } from "react-router";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faEdit } from "@fortawesome/fontawesome-free-solid";
+import { singlepost, update } from "./apiPost.js";
+import defaultpost from "../images/post.jpg";
+import { isAuthenticated } from "../auth/file.js";
+
+class EditPost extends React.Component {
+  constructor(props) {
+    super(props);
+
+    this.state = {
+      id: "",
+      title: "",
+      body: "",
+      error: "",
+      fileSize: 0,
+    };
+  }
+
+  componentDidMount() {
+    //post Form Data Browser API
+    this.postData = new FormData();
+    const postId = this.props.match.params.postId;
+    singlepost(postId).then((data) => {
+      if (data.error) {
+        this.props.history.push(`/user/${isAuthenticated().user._id}`);
+      } else
+        this.setState({
+          id: data._id,
+          title: data.title,
+          body: data.body,
+          error: "",
+        });
+    });
+  }
+
+  /**
+   * Validation of the edit profile page
+   * validate title, body and photo
+   */
+  validate() {
+    const { title, body, fileSize } = this.state;
+    if (fileSize > 10000) {
+      this.setState({ error: "Filesize should be less than 100kb " });
+      return false;
+    }
+    if (title.length === 0 || body.length === 0) {
+      this.setState({ error: "All fields are required" });
+      return false;
+    }
+    return true;
+  }
+
+  handleChange = (name) => (event) => {
+    this.setState({ error: "" });
+
+    //if the name is 'photo' take event.target.files the first []
+    const value = name === "photo" ? event.target.files[0] : event.target.value;
+    //get the fileSize and save it to the state if the size is not defined get the default value of fileSize
+    const fileSize = name === "photo" ? event.target.files[0].size : 0;
+
+    //save the values on the postData
+    this.postData.set(name, value);
+
+    this.setState({ [name]: value, fileSize });
+  };
+
+  /**
+   * validate title, body and photo if they are correct go ti next step
+   * handle server response from update method and if there is an error set it to the state
+   * if there is no error do the update and redirect to user profile page
+   */
+  editpost() {
+    if (this.validate()) {
+      const postId = this.state.id;
+      const tokenkey = isAuthenticated().token;
+      //this.userData --> send the userData to the backend
+      update(postId, tokenkey, this.postData).then((data) => {
+        if (data.error) this.setState({ error: data.error });
+        else this.props.history.push(`/`);
+      });
+    }
+  }
+
+  render() {
+    return (
+      &lt;div className="edit">
+        &lt;div className="container cont">
+          &lt;h2 className="mt-5 mb-5 text-center font1">
+            &lt;FontAwesomeIcon icon={faEdit} /> Update Post
+          &lt;/h2>
+          &lt;img
+            src={`${process.env.REACT_APP_API_URL}/post/photo/${
+              this.state.id
+            }?${new Date().getTime()}`}
+            alt={this.state.title}
+            className="card-img-top mb-4"
+            style={{ width: "20%" }}
+            onError={(index) => (index.target.src = `${defaultpost}`)}
+          />
+
+          &lt;div
+            className="alert alert-danger"
+            style={{ display: this.state.error ? "" : "none" }}
+          >
+            {this.state.error}
+          &lt;/div>
+          &lt;div className="form-group">
+            &lt;label className="text-light font">Post Photo: &lt;/label>
+            &lt;input
+              type="file"
+              onChange={this.handleChange("photo")}
+              accept="image/*"
+              className="form-control bg-light"
+            />
+          &lt;/div>
+
+          &lt;div className="form-group">
+            &lt;label className="text-light font">Title: &lt;/label>
+            &lt;input
+              type="text"
+              onChange={this.handleChange("title")}
+              value={this.state.title}
+              className="form-control bg-light"
+              name="name"
+              required
+            />
+          &lt;/div>
+          &lt;div className="form-group">
+            &lt;label className="text-light font">Post Body: &lt;/label>
+            &lt;textarea
+              type="text"
+              onChange={this.handleChange("body")}
+              value={this.state.body}
+              className="form-control bg-light"
+              name="about"
+              maxLength="500"
+              required
+            />
+          &lt;/div>
+
+          &lt;button
+            className="btn btn-raised btn-primary"
+            onClick={() => this.editpost()}
+          >
+            Update Post
+          &lt;/button>
+        &lt;/div>
+      &lt;/div>
+    );
+  }
+}
+
+export default withRouter(EditPost);
+</code></pre>
+        </article>
+    </section>
+
+
+
+
+</div>
+
+<nav>
+    <h2><a href="index.html">Home</a></h2><h3>Global</h3><ul><li><a href="global.html#comment">comment</a></li><li><a href="global.html#create">create</a></li><li><a href="global.html#findPeople">findPeople</a></li><li><a href="global.html#follow">follow</a></li><li><a href="global.html#isAuthenticated">isAuthenticated</a></li><li><a href="global.html#like">like</a></li><li><a href="global.html#listbyuser">listbyuser</a></li><li><a href="global.html#listposts">listposts</a></li><li><a href="global.html#listusers">listusers</a></li><li><a href="global.html#PrivateRoute">PrivateRoute</a></li><li><a href="global.html#readuserdata">readuserdata</a></li><li><a href="global.html#remove">remove</a></li><li><a href="global.html#signout">signout</a></li><li><a href="global.html#singlepost">singlepost</a></li><li><a href="global.html#uncomment">uncomment</a></li><li><a href="global.html#unfollow">unfollow</a></li><li><a href="global.html#unlike">unlike</a></li><li><a href="global.html#update">update</a></li><li><a href="global.html#updateUser">updateUser</a></li></ul>
+</nav>
+
+<br class="clear">
+
+<footer>
+    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 3.6.4</a> on Tue Jun 23 2020 11:56:46 GMT+0200 (Central European Summer Time)
+</footer>
+
+<script> prettyPrint(); </script>
+<script src="scripts/linenumber.js"> </script>
+</body>
+</html>
