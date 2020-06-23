@@ -3,16 +3,9 @@ import { isAuthenticated } from "../auth/file.js";
 import { withRouter } from "react-router-dom";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCommentDots, faTrashAlt } from "@fortawesome/fontawesome-free-solid";
-<<<<<<< HEAD
-import { comment, uncomment} from './apiPost.js';
-import { Link } from 'react-router-dom';
-import profileimg from '../images/icon.jpg';
-
-=======
 import { comment, uncomment } from "./apiPost.js";
 import { Link } from "react-router-dom";
 import profileimg from "../images/icon.jpg";
->>>>>>> 37114755d455008dfbd1655e9cef3accab0d1a62
 
 class Comment extends React.Component {
   constructor(props) {
@@ -23,14 +16,6 @@ class Comment extends React.Component {
       error: "",
     };
   }
-<<<<<<< HEAD
-  
-handleChange(event) {
-	
-  this.setState({error: ""});
-  this.setState({text: event.target.value});
-}
-=======
 
   handleChange(event) {
     this.setState({ error: "" });
@@ -40,7 +25,6 @@ handleChange(event) {
 
   validate() {
     const { text } = this.state;
->>>>>>> 37114755d455008dfbd1655e9cef3accab0d1a62
 
     if (!text.length > 0 || text.length > 200) {
       this.setState({
@@ -49,75 +33,21 @@ handleChange(event) {
       return false;
     }
     return true;
-<<<<<<< HEAD
-}
-
-/**
- * addComment method will save the commend to the db 
- * We will take te userId from the authenticated user
- * We will take the postId from the state
- * We will take token key from the Localstorage
- * And also the text of the comment
- * we pass all of this parameters to the comment method we have created on the apiPost
- * handle the server response
- * if error console log the err.
- * if no error clear the old text to the emty string
- * and update the comment 
-*/
-
-addComment(){
-	if(this.validate()){
-	  const userId = isAuthenticated().user._id
-  	const postId = this.props.postId
-  	const tokenkey = isAuthenticated().token
-  	const text = {text: this.state.text}
-  	comment(userId, tokenkey, postId, text)
-  	.then(data => {
-  		if(data.error){
-  			console.log(data.error)
-  		}
-  		else{
-  			this.setState({text: ""})
-  			//past this comment to the parent component Singlepost
-  			this.props.updateComments(data.comments)
-  		}
-  	})
-}
-}
-
-/**
- * Handle the response object from remove method
- * if no error delete post and redirect to homepage
- * if error console log the err.
-*/
-
-deletecomment(comment) {
-    const userId = isAuthenticated().user._id
-  	const postId = this.props.postId
-  	const tokenkey = isAuthenticated().token
-  	const text = {text: this.state.text}
-  	uncomment(userId, tokenkey, postId, comment)
-  	.then(data => {
-  		if(data.error){
-  			console.log(data.error)
-  		}
-  		else{
-  			this.props.updateComments(data.comments)
-  		}
-  	})
-
-}
-
-/**
- * On delete button click, the confirmation screen will be displayed
- * when we click cancel the account will not be deleted
- * when we click Ok the account deleteaccount method will be called
- 
-*/
-=======
   }
->>>>>>> 37114755d455008dfbd1655e9cef3accab0d1a62
 
+  /**
+   * addComment method will save the commend to the db
+   * We will take te userId from the authenticated user
+   * We will take the postId from the state
+   * We will take token key from the Localstorage
+   * And also the text of the comment
+   * we pass all of this parameters to the comment method we have created on the apiPost
+   * handle the server response
+   * if error console log the err.
+   * if no error clear the old text to the emty string
+   * and update the comment
+   *
+   */
   addComment() {
     if (this.validate()) {
       const userId = isAuthenticated().user._id;
@@ -156,13 +86,6 @@ deletecomment(comment) {
     });
   }
 
-<<<<<<< HEAD
-/*//save all comments in the comments array and get it from the props
-updateComments = comments => {
-  this.setState({comments})
-}
-*/
-=======
   /**
    * On delete button click, the confirmation screen will be displayed
    * when we click cancel the account will not be deleted
@@ -177,7 +100,6 @@ updateComments = comments => {
       this.deletecomment(comment);
     }
   }
->>>>>>> 37114755d455008dfbd1655e9cef3accab0d1a62
 
   //save all comments in the comments array and get it from the props
   updateComments = (comments) => {
