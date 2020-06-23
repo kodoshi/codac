@@ -8,9 +8,6 @@ import { Link } from 'react-router-dom';
 import profileimg from '../images/icon.jpg';
 
 
-
-
-
 class Comment extends React.Component {
 
 constructor(props) {
@@ -24,9 +21,9 @@ constructor(props) {
   }
   
 handleChange(event) {
-		this.setState({error: ""});
-
-	this.setState({text: event.target.value});
+	
+  this.setState({error: ""});
+  this.setState({text: event.target.value});
 }
 
 validate (){
@@ -38,6 +35,19 @@ validate (){
     }   
     return true;
 }
+
+/**
+ * addComment method will save the commend to the db 
+ * We will take te userId from the authenticated user
+ * We will take the postId from the state
+ * We will take token key from the Localstorage
+ * And also the text of the comment
+ * we pass all of this parameters to the comment method we have created on the apiPost
+ * handle the server response
+ * if error console log the err.
+ * if no error clear the old text to the emty string
+ * and update the comment 
+*/
 
 addComment(){
 	if(this.validate()){
@@ -97,10 +107,11 @@ deleteConfirmation(comment) {
 }
 
 
-//save all comments in the comments array and get it from the props
+/*//save all comments in the comments array and get it from the props
 updateComments = comments => {
   this.setState({comments})
 }
+*/
 
 render() {
 	return (

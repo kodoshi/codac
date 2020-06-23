@@ -41,7 +41,7 @@ checkLike(likes){
 
 
 /**
-* This method will check if we send a put request to unlike or like
+* This method will send a out request to unlike or like
 * We take the userId from the authenticated user
 * We take the postId from the State
 * We take the Tokenkey from the authenticated user
@@ -163,6 +163,7 @@ render() {
         	alt={post.title} className="img-thumbnail mb-3"
         	style={{width: '100%', height: "300px", objectFit:"cover"}} onError = {i => (i.target.src = `${defaultpost}`)}
 			/>
+
 {/* if the like state is true it will be a request to post/like, and on click the clickLike method will be called, ThumbsUp*/ }      
 {/* else if the like state is false it will be a request to post/unlike, and on click the clickLike method will be called, ThumbsDown*/ }      
 
