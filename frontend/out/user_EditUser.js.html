@@ -1,0 +1,255 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>JSDoc: Source: user/EditUser.js</title>
+
+    <script src="scripts/prettify/prettify.js"> </script>
+    <script src="scripts/prettify/lang-css.js"> </script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+</head>
+
+<body>
+
+<div id="main">
+
+    <h1 class="page-title">Source: user/EditUser.js</h1>
+
+    
+
+
+
+    
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>import React from "react";
+import { isAuthenticated } from "../auth/file.js";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faEdit } from "@fortawesome/fontawesome-free-solid";
+import profileimg from "../images/icon.jpg";
+import { withRouter } from "react-router";
+import { update, readuserdata, updateUser } from "./apiUsers.js";
+
+class EditUser extends React.Component {
+  constructor(props) {
+    super(props);
+
+    this.state = {
+      name: "",
+      email: "",
+      password: "",
+      id: "",
+      about: "",
+      error: "",
+      fileSize: 0,
+    };
+  }
+
+  /**
+   * When the page will be loaded and we are on the Edit profile page all the user data will be read and set to the state
+   * if there is an error we will be redirect to the user profile
+   */
+  componentDidMount() {
+    //user Form Data Browser API
+    this.userData = new FormData();
+    const userId = this.props.match.params.userId;
+    const tokenkey = isAuthenticated().token;
+    readuserdata(userId, tokenkey).then((data) => {
+      if (data.error) {
+        this.props.history.push(`../${this.state.id}`);
+      } else
+        this.setState({
+          id: data._id,
+          name: data.name,
+          email: data.email,
+          about: data.about,
+        });
+    });
+  }
+
+  /**
+   * Validation of the edit profile page
+   * validate name, email and password
+   */
+  validate() {
+    const { name, email, password, fileSize } = this.state;
+    if (fileSize > 10000) {
+      this.setState({ error: "Filesize should be less than 100kb " });
+      return false;
+    }
+    if (name.length === 0) {
+      this.setState({ error: "Name is required" });
+      return false;
+    }
+    if (!/.+@.+\..+/.test(email)) {
+      this.setState({ error: "Email should be in the right format" });
+      return false;
+    }
+    if (password.length >= 1 &amp;&amp; password.length &lt;= 5) {
+      this.setState({ error: "Password must contain at least 6 characters" });
+      return false;
+    }
+    return true;
+  }
+
+  handleChange = (name) => (event) => {
+    this.setState({ error: "" });
+
+    //if the name is 'photo' take event.target.files the first []
+    const value = name === "photo" ? event.target.files[0] : event.target.value;
+    //get the fileSize and save it to the state if the size is not defined get the default value of fileSize
+    const fileSize = name === "photo" ? event.target.files[0].size : 0;
+
+    //save the values on the userData
+    this.userData.set(name, value);
+
+    this.setState({ [name]: value, fileSize });
+  };
+
+  /**
+   * validate name, email and password if they are correct go ti next step (u can use the current password || new one)
+   * handle server response from update method and if there is an error set it to the state
+   * if there is no error do the update and redirect to user profile page
+   */
+  editprofile() {
+    if (this.validate()) {
+      const userId = this.props.match.params.userId;
+      const tokenkey = isAuthenticated().token;
+      //this.userData --> send the userData to the backend
+      update(userId, tokenkey, this.userData).then((data) => {
+        if (data.error) this.setState({ error: data.error });
+        else if (isAuthenticated().user.role === "admin") {
+          this.props.history.push(`../${this.state.id}`);
+        } else
+          updateUser(data, () => {
+            //console.log(data)
+            this.props.history.push(`../${this.state.id}`);
+          });
+      });
+    }
+  }
+
+  render() {
+    //show the image on the edit user profile after upload, if no image show the default imgage
+    const photoUrl = this.state.id
+      ? `${process.env.REACT_APP_API_URL}/user/photo/${
+          this.state.id
+        }?${new Date().getTime()}`
+      : profileimg;
+    return (
+      &lt;div className="edit">
+        &lt;div className="container cont">
+          &lt;h2 className="mt-5 mb-5 text-center font1">
+            &lt;FontAwesomeIcon icon={faEdit} /> Edit Profile
+          &lt;/h2>
+          &lt;img
+            src={photoUrl}
+            alt={this.state.name}
+            className="card-img-top"
+            style={{ width: "20%" }}
+            onError={(index) => (index.target.src = `${profileimg}`)}
+          />
+
+          &lt;div
+            className="alert alert-danger"
+            style={{ display: this.state.error ? "" : "none" }}
+          >
+            {this.state.error}
+          &lt;/div>
+          &lt;div className="form-group">
+            &lt;label className="text-light font">Profile Photo: &lt;/label>
+            &lt;input
+              type="file"
+              onChange={this.handleChange("photo")}
+              accept="image/*"
+              className="form-control bg-light"
+            />
+          &lt;/div>
+
+          &lt;div className="form-group">
+            &lt;label className="text-light font">Username: &lt;/label>
+            &lt;input
+              type="text"
+              onChange={this.handleChange("name")}
+              value={this.state.name}
+              className="form-control bg-light"
+              name="name"
+              required
+            />
+          &lt;/div>
+          &lt;div className="form-group">
+            &lt;label className="text-light font">About me: &lt;/label>
+            &lt;textarea
+              type="text"
+              onChange={this.handleChange("about")}
+              value={this.state.about}
+              className="form-control bg-light"
+              name="about"
+              maxLength="300"
+              required
+            />
+          &lt;/div>
+
+          &lt;div className="form-group ">
+            &lt;label className="text-light font">Email: &lt;/label>
+            &lt;input
+              type="email"
+              onChange={this.handleChange("email")}
+              value={this.state.email}
+              className="form-control bg-light"
+              name="email"
+              required
+            />
+          &lt;/div>
+          &lt;div className="form-group">
+            &lt;label className="text-light font">Password: &lt;/label>
+            &lt;input
+              type="password"
+              onChange={this.handleChange("password")}
+              value={this.state.password}
+              className="form-control bg-light"
+              name="password"
+              required
+            />
+          &lt;/div>
+
+          &lt;button
+            className="btn btn-raised btn-primary"
+            onClick={() => this.editprofile()}
+          >
+            Edit
+          &lt;/button>
+        &lt;/div>
+      &lt;/div>
+    );
+  }
+}
+
+export default withRouter(EditUser);
+</code></pre>
+        </article>
+    </section>
+
+
+
+
+</div>
+
+<nav>
+    <h2><a href="index.html">Home</a></h2><h3>Global</h3><ul><li><a href="global.html#comment">comment</a></li><li><a href="global.html#create">create</a></li><li><a href="global.html#findPeople">findPeople</a></li><li><a href="global.html#follow">follow</a></li><li><a href="global.html#isAuthenticated">isAuthenticated</a></li><li><a href="global.html#like">like</a></li><li><a href="global.html#listbyuser">listbyuser</a></li><li><a href="global.html#listposts">listposts</a></li><li><a href="global.html#listusers">listusers</a></li><li><a href="global.html#PrivateRoute">PrivateRoute</a></li><li><a href="global.html#readuserdata">readuserdata</a></li><li><a href="global.html#remove">remove</a></li><li><a href="global.html#signout">signout</a></li><li><a href="global.html#singlepost">singlepost</a></li><li><a href="global.html#uncomment">uncomment</a></li><li><a href="global.html#unfollow">unfollow</a></li><li><a href="global.html#unlike">unlike</a></li><li><a href="global.html#update">update</a></li><li><a href="global.html#updateUser">updateUser</a></li></ul>
+</nav>
+
+<br class="clear">
+
+<footer>
+    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 3.6.4</a> on Tue Jun 23 2020 11:16:10 GMT+0200 (Central European Summer Time)
+</footer>
+
+<script> prettyPrint(); </script>
+<script src="scripts/linenumber.js"> </script>
+</body>
+</html>

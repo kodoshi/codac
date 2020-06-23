@@ -1,0 +1,320 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>JSDoc: Source: post/apiPost.js</title>
+
+    <script src="scripts/prettify/prettify.js"> </script>
+    <script src="scripts/prettify/lang-css.js"> </script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+</head>
+
+<body>
+
+<div id="main">
+
+    <h1 class="page-title">Source: post/apiPost.js</h1>
+
+    
+
+
+
+    
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>/**
+ * create method: make a http request to the server.
+ * we send the token and post to the backend
+ * take the response object from the server
+ * and return json response
+ *
+ * @param {string} userId id of the user
+ * @param {string} tokenkey token that is saved in localStorage
+ * @param {string} post, we need to add new post
+ * @returns {json} response.json
+ */
+export const create = (userId, tokenkey, post) => {
+  return fetch(`${process.env.REACT_APP_API_URL}/post/new/${userId}`, {
+    method: "POST",
+    headers: {
+      Accept: "application/json",
+      Authorization: `Bearer ${tokenkey}`,
+    },
+    // no need to stringify, we have FormData
+    body: post,
+  })
+    .then((response) => {
+      return response.json();
+    })
+    .catch((err) => {
+      console.log(err);
+    });
+};
+
+/**
+ * listpost method: get all post from the DB
+ * make the http request to the server to get all posts from the db.
+ * and then take the server response.
+ * the response will be handeled and if there is an error we console log that error.
+ *
+ * @returns {json} response.json
+ */
+export const listposts = () => {
+  return fetch(`${process.env.REACT_APP_API_URL}/posts/`, {
+    method: "GET",
+  })
+    .then((response) => {
+      return response.json();
+    })
+    .catch((err) => {
+      console.log(err);
+    });
+};
+
+/**
+ * make the http request to the server to get single post from the db.
+ * and then take the server response.
+ * the response will be handeled and if there is an error we console log that error.
+ *
+ * @param {string} postId id of the post
+ * @returns {json} response.json
+ */
+export const singlepost = (postId) => {
+  return fetch(`${process.env.REACT_APP_API_URL}/post/${postId}`, {
+    method: "GET",
+  })
+    .then((response) => {
+      return response.json();
+    })
+    .catch((err) => {
+      console.log(err);
+    });
+};
+
+/**
+ * make the http request to the server to get all posts from a specific user.
+ * then take the server response.
+ * the response will be handeled and if there is an error we console log that error.
+ *
+ * @param {string} userId id of the user
+ * @param {string} tokenkey token in the local Storage
+ * @returns {json} response.json
+ */
+export const listbyuser = (userId, tokenkey) => {
+  return fetch(`${process.env.REACT_APP_API_URL}/post/by/${userId}`, {
+    method: "GET",
+    headers: {
+      Accept: "application/json",
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${tokenkey}`,
+    },
+  })
+    .then((response) => {
+      return response.json();
+    })
+    .catch((err) => {
+      console.log(err);
+    });
+};
+
+/**
+ * Delete user Account method: make a http request to the server.
+ * we send the token to the backend
+ * take the response object from the server
+ * and return json response
+ *
+ * @param {string} postId id of the user in the url
+ * @param {string} tokenkey token that is saved in localStorage
+ * @returns {json} response.json
+ */
+export const remove = (postId, tokenkey) => {
+  return fetch(`${process.env.REACT_APP_API_URL}/post/${postId}`, {
+    method: "DELETE",
+    headers: {
+      Accept: "application/json",
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${tokenkey}`,
+    },
+  })
+    .then((response) => {
+      return response.json();
+    })
+    .catch((err) => {
+      console.log(err);
+    });
+};
+
+/**
+ * Update information method: make a http request to the server.
+ * we send the token and post to the backend
+ * take the response object from the server
+ * and return json response
+ *
+ * @param {string} postId id of the post in the url
+ * @param {string} tokenkey token that is saved in localStorage
+ * @param {string} post data  that is on the State
+ * @returns {json} response.json
+ */
+export const update = (postId, tokenkey, post) => {
+  return fetch(`${process.env.REACT_APP_API_URL}/post/${postId}`, {
+    method: "PUT",
+    headers: {
+      Accept: "application/json",
+      //no need for Content Type, because this is going to be FormData
+      Authorization: `Bearer ${tokenkey}`,
+    },
+    // no need to stringify, we have FormData
+    body: post,
+  })
+    .then((response) => {
+      return response.json();
+    })
+    .catch((err) => {
+      console.log(err);
+    });
+};
+
+/**
+ * Like method: make a http request to the server.
+ * we send the userId and postId to the backend
+ * take the response object from the server
+ * and return json response
+ *
+ * @param {string} userId id of the user who liked the post
+ * @param {string} tokenkey token that is saved in localStorage
+ * @param {string} postId id of the post which has been liked
+ * @returns {json} response.json
+ */
+export const like = (userId, tokenkey, postId) => {
+  return fetch(`${process.env.REACT_APP_API_URL}/post/like`, {
+    method: "PUT",
+    headers: {
+      Accept: "application/json",
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${tokenkey}`,
+    },
+    body: JSON.stringify({ userId, postId }),
+  })
+    .then((response) => {
+      return response.json();
+    })
+    .catch((err) => {
+      console.log(err);
+    });
+};
+
+/**
+ * Unlike method: make a http request to the server.
+ * we send the userId and postId to the backend
+ * take the response object from the server
+ * and return json response
+ *
+ * @param {string} userId id of the user who liked the post
+ * @param {string} tokenkey token that is saved in localStorage
+ * @param {string} postId id of the post which has been liked
+ * @returns {json} response.json
+ */
+export const unlike = (userId, tokenkey, postId) => {
+  return fetch(`${process.env.REACT_APP_API_URL}/post/unlike`, {
+    method: "PUT",
+    headers: {
+      Accept: "application/json",
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${tokenkey}`,
+    },
+    body: JSON.stringify({ userId, postId }),
+  })
+    .then((response) => {
+      return response.json();
+    })
+    .catch((err) => {
+      console.log(err);
+    });
+};
+
+/**
+ * comment method: make a http request to the server.
+ * we send the userId and postId to the backend
+ * take the response object from the server
+ * and return json response
+ *
+ * @param {string} userId id of the user
+ * @param {string} tokenkey token that is saved in localStorage
+ * @param {string} postId id, to wich post belongs this comment
+ * @param {string} comment, the actual comment
+ * @returns {json} response.json
+ */
+export const comment = (userId, tokenkey, postId, comment) => {
+  return fetch(`${process.env.REACT_APP_API_URL}/post/comment`, {
+    method: "PUT",
+    headers: {
+      Accept: "application/json",
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${tokenkey}`,
+    },
+    body: JSON.stringify({ userId, postId, comment }),
+  })
+    .then((response) => {
+      return response.json();
+    })
+    .catch((err) => {
+      console.log(err);
+    });
+};
+
+/**
+ * comment method: make a http request to the server.
+ * we send the userId and postId to the backend
+ * take the response object from the server
+ * and return json response
+ *
+ * @param {string} userId id of the user
+ * @param {string} tokenkey token that is saved in localStorage
+ * @param {string} postId id, to wich post belongs this comment
+ * @param {string} comment, the actual comment
+ * @returns {json} response.json
+ */
+export const uncomment = (userId, tokenkey, postId, comment) => {
+  return fetch(`${process.env.REACT_APP_API_URL}/post/uncomment`, {
+    method: "PUT",
+    headers: {
+      Accept: "application/json",
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${tokenkey}`,
+    },
+    body: JSON.stringify({ userId, postId, comment }),
+  })
+    .then((response) => {
+      return response.json();
+    })
+    .catch((err) => {
+      console.log(err);
+    });
+};
+</code></pre>
+        </article>
+    </section>
+
+
+
+
+</div>
+
+<nav>
+    <h2><a href="index.html">Home</a></h2><h3>Global</h3><ul><li><a href="global.html#comment">comment</a></li><li><a href="global.html#create">create</a></li><li><a href="global.html#findPeople">findPeople</a></li><li><a href="global.html#follow">follow</a></li><li><a href="global.html#isAuthenticated">isAuthenticated</a></li><li><a href="global.html#like">like</a></li><li><a href="global.html#listbyuser">listbyuser</a></li><li><a href="global.html#listposts">listposts</a></li><li><a href="global.html#listusers">listusers</a></li><li><a href="global.html#PrivateRoute">PrivateRoute</a></li><li><a href="global.html#readuserdata">readuserdata</a></li><li><a href="global.html#remove">remove</a></li><li><a href="global.html#signout">signout</a></li><li><a href="global.html#singlepost">singlepost</a></li><li><a href="global.html#uncomment">uncomment</a></li><li><a href="global.html#unfollow">unfollow</a></li><li><a href="global.html#unlike">unlike</a></li><li><a href="global.html#update">update</a></li><li><a href="global.html#updateUser">updateUser</a></li></ul>
+</nav>
+
+<br class="clear">
+
+<footer>
+    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 3.6.4</a> on Tue Jun 23 2020 11:16:10 GMT+0200 (Central European Summer Time)
+</footer>
+
+<script> prettyPrint(); </script>
+<script src="scripts/linenumber.js"> </script>
+</body>
+</html>
